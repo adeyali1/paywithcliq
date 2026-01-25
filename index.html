@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pay with CliQ — AI Confirmation Infrastructure</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #06080c;
+            --panel: #0c111a;
+            --primary: #00ffb2;
+            --secondary: #6a7cff;
+            --muted: #9aa4b2;
+            --glow: rgba(0, 255, 178, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Inter, sans-serif
+        }
+
+        body {
+            background: radial-gradient(circle at top, #0b1220, #04060a);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* LOGIN */
+        #login {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, #0b1c30, #020409);
+            z-index: 999;
+        }
+
+        .login-box {
+            width: 340px;
+            padding: 40px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, .06);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 40px 120px rgba(0, 0, 0, .8);
+        }
+
+        .login-box h2 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 22px
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 14px;
+            border-radius: 10px;
+            border: none;
+            background: #0b1220;
+            color: #fff;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            font-weight: 600;
+            cursor: pointer;
+            color: #000;
+        }
+
+        #error {
+            color: #ff6b6b;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 8px
+        }
+
+        #app {
+            display: none
+        }
+
+        /* GLOBAL */
+        section {
+            padding: 110px 10%;
+            position: relative
+        }
+
+        .center {
+            text-align: center;
+            max-width: 1000px;
+            margin: auto
+        }
+
+        h1 {
+            font-size: 64px;
+            font-weight: 700;
+            margin-bottom: 20px
+        }
+
+        h2 {
+            font-size: 38px;
+            color: var(--primary);
+            margin-bottom: 20px
+        }
+
+        p {
+            font-size: 18px;
+            color: var(--muted);
+            line-height: 1.7
+        }
+
+        /* GLOW */
+        .glow {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, var(--glow), transparent 70%);
+            filter: blur(120px);
+            pointer-events: none;
+            animation: float 14s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(-50%, -50%)
+            }
+
+            50% {
+                transform: translate(-48%, -54%)
+            }
+
+            100% {
+                transform: translate(-50%, -50%)
+            }
+        }
+
+        /* GRID + CARDS */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 32px;
+            margin-top: 60px;
+        }
+
+        .card {
+            background: linear-gradient(180deg, #0e1422, #090d16);
+            padding: 34px;
+            border-radius: 22px;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05);
+            transition: transform .5s, box-shadow .5s;
+        }
+
+        .card:hover {
+            transform: translateY(-14px) scale(1.04);
+            box-shadow: 0 40px 120px rgba(0, 255, 178, .35);
+        }
+
+        /* WORKFLOW */
+        .workflow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: center;
+            margin-top: 60px;
+        }
+
+        .step {
+            padding: 18px 26px;
+            border-radius: 50px;
+            background: rgba(0, 255, 178, .08);
+            border: 1px solid rgba(0, 255, 178, .35);
+            animation: pulse 3s infinite;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 255, 178, .4)
+            }
+
+            70% {
+                box-shadow: 0 0 0 22px rgba(0, 255, 178, 0)
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 255, 178, 0)
+            }
+        }
+
+        /* DASHBOARD */
+        .dashboard {
+            background: #060b15;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: inset 0 0 0 1px rgba(0, 255, 178, .25);
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            color: var(--muted)
+        }
+
+        .badge {
+            background: var(--primary);
+            color: #000;
+            padding: 6px 14px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* CODE */
+        pre {
+            background: #050914;
+            padding: 28px;
+            border-radius: 20px;
+            box-shadow: inset 0 0 0 1px rgba(106, 124, 255, .35);
+            overflow-x: auto;
+        }
+
+        code {
+            color: #7cf7ff
+        }
+
+        /* COST */
+        .cost {
+            margin-top: 20px;
+            font-size: 26px;
+            color: var(--primary);
+            font-weight: 600;
+            opacity: .85;
+        }
+
+        /* AI CANVAS */
+        canvas {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px;
+            color: #6b7484;
+            font-size: 14px
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="ai"></canvas>
+
+    <!-- LOGIN -->
+    <div id="login">
+        <div class="login-box">
+            <h2>Confidential Pitch</h2>
+            <input id="user" placeholder="Username">
+            <input id="pass" type="password" placeholder="Password">
+            <button onclick="login()">Enter</button>
+            <div id="error"></div>
+        </div>
+    </div>
+
+    <div id="app">
+
+        <section class="center">
+            <div class="glow" style="top:-200px;left:50%"></div>
+            <h1>Pay with CliQ</h1>
+            <p>
+                A next-generation AI confirmation layer enabling CliQ payments
+                for online platforms, apps, and e-commerce in Jordan.
+            </p>
+        </section>
+
+        <section>
+            <h2>The Problem</h2>
+            <div class="grid">
+                <div class="card">Most users don’t trust card payments online</div>
+                <div class="card">CliQ exists — but not for automated checkout</div>
+                <div class="card">Manual confirmation blocks scale & growth</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>The Solution</h2>
+            <p>
+                A Stripe-like confirmation infrastructure that enables
+                <strong>Pay with CliQ</strong> — without receiving funds, without bank APIs,
+                and without changing merchant settlement flows.
+            </p>
+        </section>
+
+        <section>
+            <h2>How It Works</h2>
+            <div class="workflow">
+                <div class="step">Create Payment Intent</div>
+                <div class="step">User Sends CliQ</div>
+                <div class="step">Merchant Device Signal</div>
+                <div class="step">AI Correlation Engine</div>
+                <div class="step">Instant Confirmation</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>AI at the Core</h2>
+            <div class="grid">
+                <div class="card">Multi-signal payment correlation</div>
+                <div class="card">Confidence scoring per transaction</div>
+                <div class="card">Self-learning confirmation models</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Merchant Dashboard</h2>
+            <div class="dashboard">
+                <div class="row">Order #9120 <span class="badge">Confirmed</span></div>
+                <div class="row">Amount: 25.00 JOD</div>
+                <div class="row">Method: CliQ</div>
+                <div class="row">AI Confidence: 98.7%</div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Developer API</h2>
+            <pre><code>
+POST /v1/payment_intents
+
+{
+  "amount": 25.00,
+  "currency": "JOD",
+  "method": "cliq"
+}
+</code></pre>
+        </section>
+
+        <section class="center">
+            <h2>Project Cost</h2>
+            <div class="cost">25,000 JOD — full platform delivery</div>
+        </section>
+
+        <section class="center">
+            <h2>Execution</h2>
+            <p>
+                Led by an experienced CTO responsible for architecture,
+                infrastructure, security, and AI-driven decision systems.
+            </p>
+        </section>
+
+        <footer>
+            Pay with CliQ — AI Confirmation Infrastructure<br>
+            Confidential Pitch
+        </footer>
+
+    </div>
+
+    <script>
+        /* LOGIN */
+        const loginEl = document.getElementById("login"),
+            appEl = document.getElementById("app"),
+            err = document.getElementById("error");
+        if (localStorage.getItem("auth")) { loginEl.style.display = "none"; appEl.style.display = "block" }
+        function login() {
+            if (user.value === "demo" && pass.value === "cliq2026") {
+                localStorage.setItem("auth", "1");
+                loginEl.style.display = "none"; appEl.style.display = "block";
+            } else err.innerText = "Invalid credentials";
+        }
+
+        /* AI CANVAS */
+        const c = document.getElementById("ai"), x = c.getContext("2d");
+        let w, h, n = [];
+        function r() { w = c.width = innerWidth; h = c.height = innerHeight }
+        r(); addEventListener("resize", r);
+        for (let i = 0; i < 140; i++)n.push({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - .5) * .4, vy: (Math.random() - .5) * .4 });
+        (function a() {
+            x.clearRect(0, 0, w, h);
+            for (let i = 0; i < n.length; i++) {
+                let p = n[i]; p.x += p.vx; p.y += p.vy;
+                if (p.x < 0 || p.x > w) p.vx *= -1;
+                if (p.y < 0 || p.y > h) p.vy *= -1;
+                x.fillStyle = "rgba(0,255,178,.6)"; x.fillRect(p.x, p.y, 2, 2);
+                for (let j = i + 1; j < n.length; j++) {
+                    let q = n[j], d = Math.hypot(p.x - q.x, p.y - q.y);
+                    if (d < 120) {
+                        x.strokeStyle = "rgba(0,255,178,.12)";
+                        x.beginPath(); x.moveTo(p.x, p.y); x.lineTo(q.x, q.y); x.stroke()
+                    }
+                }
+            }
+            requestAnimationFrame(a)
+        })();
+    </script>
+
+</body>
+
+</html>
