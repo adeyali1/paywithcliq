@@ -1,305 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>AI Wallet Payment Confirmation Layer</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <title>MASA Pay — Investor Deck</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- TOKENS --- */
+        :root {
+            --bg: #030304;
+            --surface: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --primary: #3b82f6; 
+            --accent: #8b5cf6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+        }
 
-<style>
-:root{
-  --bg:#050507;
-  --card:#0e1015;
-  --primary:#7c7cff;
-  --accent:#22d3ee;
-  --text:#ffffff;
-  --muted:#9ca3af;
-  --border:rgba(255,255,255,.08);
-}
+        /* --- RESET --- */
+        * { box-sizing: border-box; outline: none; margin: 0; padding: 0; }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
 
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  background:var(--bg);
-  color:var(--text);
-  font-family:Inter,sans-serif;
-}
+        /* --- BACKGROUND FX --- */
+        .orb {
+            position: fixed; border-radius: 50%; filter: blur(140px); z-index: -1; opacity: 0.25;
+            pointer-events: none; animation: float 12s ease-in-out infinite alternate;
+        }
+        .orb-1 { top: -20%; left: -20%; width: 60vw; height: 60vw; background: radial-gradient(circle, var(--primary), transparent 60%); }
+        .orb-2 { bottom: -20%; right: -20%; width: 50vw; height: 50vw; background: radial-gradient(circle, var(--accent), transparent 60%); }
+        
+        @keyframes float { 0% { transform: translate(0,0); } 100% { transform: translate(30px, 50px); } }
 
-/* LOGIN */
-#loginScreen{
-  position:fixed; inset:0;
-  background:#020202;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:999;
-}
-.login-box{
-  background:#111;
-  border:1px solid #333;
-  padding:36px;
-  border-radius:18px;
-  width:300px;
-  text-align:center;
-}
-.login-box input{
-  width:100%;
-  padding:12px;
-  margin-bottom:12px;
-  background:#222;
-  border:1px solid #444;
-  border-radius:8px;
-  color:#fff;
-  text-align:center;
-}
-.login-box button{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:8px;
-  background:var(--primary);
-  font-weight:700;
-  cursor:pointer;
-}
-#error{
-  color:#ef4444;
-  font-size:12px;
-  margin-top:8px;
-}
+        /* --- LAYOUT --- */
+        #app { display: none; }
+        .container { max-width: 600px; margin: 0 auto; padding: 40px 20px 150px 20px; }
 
-/* APP */
-#app{display:none}
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; color: #fff; line-height: 1.1; }
+        
+        h1 {
+            font-size: 3.5rem; letter-spacing: -0.04em; margin-bottom: 24px;
+            background: linear-gradient(180deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
 
-.wrapper{
-  max-width:390px;
-  margin:0 auto;
-  padding:60px 16px 120px;
-}
+        h2 { font-size: 1.8rem; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
+        p { color: var(--text-muted); font-size: 1rem; margin-bottom: 20px; line-height: 1.6; }
 
-/* CARDS */
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:24px;
-  margin-bottom:28px;
-  box-shadow:0 10px 30px rgba(0,0,0,.4);
-}
+        /* --- CARDS --- */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 20px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: border-color 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .card:hover { border-color: rgba(255,255,255,0.2); }
 
-.badge{
-  display:inline-block;
-  font-size:11px;
-  font-weight:700;
-  padding:6px 12px;
-  border-radius:999px;
-  background:rgba(124,124,255,.15);
-  color:var(--primary);
-  margin-bottom:14px;
-}
+        /* --- SECTIONS SPECIFIC STYLES --- */
+        .problem-icon { color: var(--danger); background: rgba(239, 68, 68, 0.1); padding: 8px; border-radius: 8px; }
+        .solution-icon { color: var(--success); background: rgba(16, 185, 129, 0.1); padding: 8px; border-radius: 8px; }
+        
+        /* --- LISTS --- */
+        .bullet-list { list-style: none; }
+        .bullet-list li {
+            position: relative; padding-left: 24px; margin-bottom: 16px; color: #e2e8f0;
+        }
+        .bullet-list li::before {
+            content: "•"; color: var(--text-muted); position: absolute; left: 0; font-size: 1.2em; top: -2px;
+        }
+        .bullet-list.danger li::before { color: var(--danger); }
+        .bullet-list.success li::before { color: var(--success); }
 
-h1,h2{
-  font-family:"Space Grotesk",sans-serif;
-}
-h1{font-size:32px;line-height:1.1;margin-bottom:14px}
-h2{font-size:22px;margin-bottom:12px}
+        /* --- DATA BARS --- */
+        .bar-wrap { margin-bottom: 18px; }
+        .bar-head { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px; font-weight: 600; text-transform: uppercase; }
+        .bar-bg { background: rgba(255,255,255,0.08); height: 6px; border-radius: 10px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 10px; width: 0; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
+        .fill-red { background: var(--danger); }
+        .fill-orange { background: #f97316; }
 
-p{
-  font-size:15px;
-  color:var(--muted);
-  line-height:1.6;
-}
+        .source-btn {
+            display: inline-flex; align-items: center; gap: 4px;
+            font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;
+            border: 1px solid rgba(255,255,255,0.08); padding: 3px 8px; border-radius: 100px;
+            text-decoration: none; margin-top: 6px; transition: 0.2s;
+        }
+        .source-btn:hover { border-color: var(--primary); color: #fff; }
 
-/* FLOW */
-.flow{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-top:14px;
-}
-.step{
-  padding:6px 14px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:600;
-  background:rgba(124,124,255,.15);
-  color:#c7d2fe;
-}
+        /* --- TIMELINE --- */
+        .timeline { padding-left: 20px; border-left: 2px solid var(--border); margin-left: 10px; margin-top: 20px; }
+        .t-item { position: relative; padding-left: 30px; margin-bottom: 30px; }
+        .t-item::before {
+            content: ''; position: absolute; left: -26px; top: 0; width: 10px; height: 10px;
+            border-radius: 50%; background: var(--bg); border: 2px solid var(--primary);
+        }
+        .t-item.active::before { background: var(--primary); box-shadow: 0 0 10px var(--primary); }
 
-/* STATS */
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-}
-.stat{
-  background:#0a0c11;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:12px;
-  text-align:center;
-}
-.stat strong{
-  display:block;
-  font-size:18px;
-}
-.stat span{
-  font-size:10px;
-  color:var(--muted);
-  text-transform:uppercase;
-}
+        /* --- LOGIN --- */
+        #login-screen {
+            position: fixed; inset: 0; background: #000; z-index: 99999;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .login-box { width: 300px; text-align: center; }
+        .login-input {
+            width: 100%; background: #161616; border: 1px solid #333; color: #fff;
+            padding: 12px; margin-bottom: 12px; border-radius: 8px; text-align: center;
+        }
+        .login-btn {
+            width: 100%; background: #fff; color: #000; font-weight: 700; padding: 12px;
+            border-radius: 8px; border: none; cursor: pointer;
+        }
 
-/* ASK */
-.ask{
-  text-align:center;
-}
-.ask .amount{
-  font-size:42px;
-  font-weight:800;
-  margin:14px 0;
-  color:var(--primary);
-}
-
-footer{
-  text-align:center;
-  font-size:11px;
-  color:#6b7280;
-  margin-top:40px;
-}
-</style>
+    </style>
 </head>
-
 <body>
 
-<!-- LOGIN -->
-<div id="loginScreen">
-  <div class="login-box">
-    <h3 style="margin-bottom:10px">MASA PAY</h3>
-    <input id="user" placeholder="Username (demo)">
-    <input id="pass" type="password" placeholder="Password (cliq2026)">
-    <button onclick="doLogin()">Access Deck</button>
-    <div id="error"></div>
-  </div>
-</div>
-
-<!-- APP -->
-<div id="app">
-<div class="wrapper">
-
-<!-- COVER -->
-<div class="card">
-  <span class="badge">Pre-Seed Infrastructure</span>
-  <h1>AI Wallet Payment Confirmation</h1>
-  <p>
-    A non-custodial AI verification layer enabling
-    <strong>mobile wallet payments</strong> for online platforms,
-    apps, and e-commerce.
-  </p>
-</div>
-
-<!-- PROBLEM -->
-<div class="card">
-  <h2>The Problem</h2>
-  <p>
-    Millions use mobile wallets and bank apps daily,
-    but online checkout still depends on cards.
-  </p>
-  <p>
-    Merchants cannot automate confirmations for
-    wallet-based payments — breaking scale and trust.
-  </p>
-</div>
-
-<!-- SOLUTION -->
-<div class="card">
-  <h2>Our Solution</h2>
-  <p>
-    We act as an <strong>AI confirmation layer</strong>,
-    not a payment receiver.
-  </p>
-  <p>
-    Platforms stay automated while users pay using
-    the wallet or banking app they already trust.
-  </p>
-</div>
-
-<!-- HOW IT WORKS -->
-<div class="card">
-  <h2>How It Works</h2>
-  <div class="flow">
-    <div class="step">Payment Intent</div>
-    <div class="step">Wallet Transfer</div>
-    <div class="step">Merchant Signal</div>
-    <div class="step">AI Correlation</div>
-    <div class="step">Confirmed</div>
-  </div>
-</div>
-
-<!-- AI -->
-<div class="card">
-  <h2>AI-Driven by Design</h2>
-  <p>
-    Wallet payments were never built for APIs.
-  </p>
-  <p>
-    Our AI engine evaluates transaction context,
-    timing, and merchant-side signals to determine
-    confirmation with high confidence — instantly.
-  </p>
-</div>
-
-<!-- MARKET -->
-<div class="card">
-  <h2>Market Opportunity</h2>
-  <div class="stats">
-    <div class="stat">
-      <strong>$250M</strong>
-      <span>Jordan GMV</span>
+    <!-- LOGIN -->
+    <div id="login-screen">
+        <div class="login-box">
+            <div style="font-family:'Space Grotesk'; font-weight:700; font-size:24px; margin-bottom:10px;">MASA PAY</div>
+            <input type="text" id="user" class="login-input" placeholder="Username">
+            <input type="password" id="pass" class="login-input" placeholder="Password">
+            <button onclick="login()" class="login-btn">View Pitch</button>
+            <div id="err" style="color:#ef4444; font-size:12px; margin-top:10px; min-height:18px;"></div>
+        </div>
     </div>
-    <div class="stat">
-      <strong>$15B</strong>
-      <span>MENA Wallets</span>
-    </div>
-    <div class="stat">
-      <strong>High</strong>
-      <span>Adoption</span>
-    </div>
-  </div>
-</div>
 
-<!-- ASK -->
-<div class="card ask">
-  <h2>The Ask</h2>
-  <div class="amount">25,000 JOD</div>
-  <p>
-    To build the MVP, deploy the AI confirmation engine,
-    and onboard initial wallet-based merchants.
-  </p>
-</div>
+    <!-- CONTENT -->
+    <div id="app">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
 
-<footer>
-Confidential Pitch — AI Wallet Infrastructure
-</footer>
+        <div class="container">
+            
+            <!-- HEADER -->
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:60px;">
+                <div style="width:36px; height:36px; background:linear-gradient(135deg, var(--primary), #1e40af); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px;">M</div>
+                <div style="font-family:'Space Grotesk'; font-weight:700; font-size:1.2rem;">MASA Pay</div>
+            </div>
 
-</div>
-</div>
+            <!-- HERO -->
+            <section>
+                <div style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.1); border-radius:50px; font-size:0.75rem; font-weight:700; margin-bottom:20px;">IDEA STAGE</div>
+                <h1>Accept Mobile Wallets Online. Instantly.</h1>
+                <p>The AI verification infrastructure that turns manual transfers (CliQ, InstaPay, ZainCash) into automated checkout.</p>
+            </section>
 
-<script>
-function doLogin(){
-  const u=document.getElementById("user").value;
-  const p=document.getElementById("pass").value;
-  const loginScreen=document.getElementById("loginScreen");
-  const app=document.getElementById("app");
-  const error=document.getElementById("error");
-
-  if(u==="demo" && p==="cliq2026"){
-    loginScreen.style.display="none";
-    app.style.display="block";
-    window.scrollTo(0,0);
-  }else{
-    error.innerText="Invalid credentials";
-  }
-}
-</script>
-
-</body>
-</html>
+            <!-- 1. THE PROBLEM -->
+            <section>
+                <h2><span class="problem-icon">⚠</span> The Problem</h2>
+                <div class="card js-tilt" style="border-left: 4px solid var(--danger);">
+                    <ul class="bullet-list danger">
+                        <li><strong>Card adoption is dangerously low.</strong> <br>80% of MENA customers don't use cards online. Merchants relying on cards lose the majority of the market.</li>
+                        <li><strong>Wallets are manual and disconnected.</strong> <br>CliQ and InstaPay are P2P only. Merchants force users to take "Screenshots" of payments. It's unscalable.</li>
+                        <li><strong>Cash on Delivery (COD) kills margins.</strong> <br>High return rates and delayed settlement for merchants who accept cash.</li>
+                    </ul>
+                    
+                    <div style="margin-top:25px; padding-top:20px; border-top:1px solid var(--border);">
+                        <!-- JORDAN -->
+                        <div class="bar-wrap">
+                            <div class="bar-head"><span>Jordan (Card Usage)</span> <span style="color:var(--danger)">&lt;20%</span></div>
+                            <div class="bar-bg"><div class="bar-fill fill-red" style="width: 20%"></div></div>
+                            <a href="https://www.zawya.com/en/economy/levant/jordan-36bln-in-money-transfers-via-cliq-in-first-2-months-of-2025-k0fw2bgf" target="_blank" class="source-btn">Data: Zawya</a>
+                        </div>
+                        <!-- EGYPT -->
+                        <div class="bar-wrap">
+                            <div class="bar-head"><span>Egypt (Card Usage)</s
