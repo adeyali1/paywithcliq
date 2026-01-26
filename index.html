@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Pay with CliQ — AI Confirmation Infrastructure</title>
+<title>AI Wallet Payment Confirmation Layer</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
 <style>
-:root {
+:root{
   --bg:#050507;
   --card:#0e1015;
   --primary:#7c7cff;
@@ -26,8 +26,8 @@ body{
 }
 
 /* LOGIN */
-#login{
-  position:fixed;inset:0;
+#loginScreen{
+  position:fixed; inset:0;
   background:#020202;
   display:flex;
   align-items:center;
@@ -61,7 +61,11 @@ body{
   font-weight:700;
   cursor:pointer;
 }
-#error{color:#ef4444;font-size:12px;margin-top:8px}
+#error{
+  color:#ef4444;
+  font-size:12px;
+  margin-top:8px;
+}
 
 /* APP */
 #app{display:none}
@@ -93,12 +97,11 @@ body{
   margin-bottom:14px;
 }
 
-h1,h2,h3{
+h1,h2{
   font-family:"Space Grotesk",sans-serif;
 }
 h1{font-size:32px;line-height:1.1;margin-bottom:14px}
 h2{font-size:22px;margin-bottom:12px}
-h3{font-size:16px;margin-bottom:8px}
 
 p{
   font-size:15px;
@@ -106,7 +109,7 @@ p{
   line-height:1.6;
 }
 
-/* WORKFLOW */
+/* FLOW */
 .flow{
   display:flex;
   flex-wrap:wrap;
@@ -138,7 +141,6 @@ p{
 .stat strong{
   display:block;
   font-size:18px;
-  color:#fff;
 }
 .stat span{
   font-size:10px;
@@ -156,11 +158,7 @@ p{
   margin:14px 0;
   color:var(--primary);
 }
-.ask small{
-  color:var(--muted);
-}
 
-/* FOOTER */
 footer{
   text-align:center;
   font-size:11px;
@@ -173,26 +171,28 @@ footer{
 <body>
 
 <!-- LOGIN -->
-<div id="login">
+<div id="loginScreen">
   <div class="login-box">
     <h3 style="margin-bottom:10px">MASA PAY</h3>
     <input id="user" placeholder="Username (demo)">
     <input id="pass" type="password" placeholder="Password (cliq2026)">
-    <button onclick="login()">Access Deck</button>
+    <button onclick="doLogin()">Access Deck</button>
     <div id="error"></div>
   </div>
 </div>
 
+<!-- APP -->
 <div id="app">
 <div class="wrapper">
 
 <!-- COVER -->
 <div class="card">
-  <span class="badge">Pre-Seed</span>
-  <h1>Pay with CliQ</h1>
+  <span class="badge">Pre-Seed Infrastructure</span>
+  <h1>AI Wallet Payment Confirmation</h1>
   <p>
-    An AI-powered confirmation layer enabling CliQ payments
-    for online platforms, apps, and e-commerce in Jordan.
+    A non-custodial AI verification layer enabling
+    <strong>mobile wallet payments</strong> for online platforms,
+    apps, and e-commerce.
   </p>
 </div>
 
@@ -200,12 +200,12 @@ footer{
 <div class="card">
   <h2>The Problem</h2>
   <p>
-    Most users trust CliQ more than cards.
-    Yet online checkout still depends on card payments.
+    Millions use mobile wallets and bank apps daily,
+    but online checkout still depends on cards.
   </p>
   <p>
-    Merchants are forced into Cash on Delivery or
-    manual confirmation — breaking automation and scale.
+    Merchants cannot automate confirmations for
+    wallet-based payments — breaking scale and trust.
   </p>
 </div>
 
@@ -213,35 +213,37 @@ footer{
 <div class="card">
   <h2>Our Solution</h2>
   <p>
-    We introduce a <strong>non-custodial AI verification layer</strong>
-    that confirms CliQ payments without receiving funds
-    or integrating with banks.
+    We act as an <strong>AI confirmation layer</strong>,
+    not a payment receiver.
+  </p>
+  <p>
+    Platforms stay automated while users pay using
+    the wallet or banking app they already trust.
   </p>
 </div>
 
-<!-- PRODUCT -->
+<!-- HOW IT WORKS -->
 <div class="card">
   <h2>How It Works</h2>
   <div class="flow">
-    <div class="step">Create Intent</div>
-    <div class="step">User Sends CliQ</div>
-    <div class="step">Confirmation Signal</div>
-    <div class="step">AI Evaluation</div>
+    <div class="step">Payment Intent</div>
+    <div class="step">Wallet Transfer</div>
+    <div class="step">Merchant Signal</div>
+    <div class="step">AI Correlation</div>
     <div class="step">Confirmed</div>
   </div>
 </div>
 
 <!-- AI -->
 <div class="card">
-  <h2>Why AI?</h2>
+  <h2>AI-Driven by Design</h2>
   <p>
-    CliQ was built for peer-to-peer transfers,
-    not automated checkout.
+    Wallet payments were never built for APIs.
   </p>
   <p>
-    Our AI engine correlates context, timing,
-    and merchant-side signals to determine
-    payment completion with high confidence.
+    Our AI engine evaluates transaction context,
+    timing, and merchant-side signals to determine
+    confirmation with high confidence — instantly.
   </p>
 </div>
 
@@ -255,7 +257,7 @@ footer{
     </div>
     <div class="stat">
       <strong>$15B</strong>
-      <span>Cash-Heavy MENA</span>
+      <span>MENA Wallets</span>
     </div>
     <div class="stat">
       <strong>High</strong>
@@ -268,25 +270,31 @@ footer{
 <div class="card ask">
   <h2>The Ask</h2>
   <div class="amount">25,000 JOD</div>
-  <small>
+  <p>
     To build the MVP, deploy the AI confirmation engine,
-    and onboard initial pilot merchants.
-  </small>
+    and onboard initial wallet-based merchants.
+  </p>
 </div>
 
 <footer>
-Pay with CliQ — AI Confirmation Infrastructure<br>
-Confidential Pitch
+Confidential Pitch — AI Wallet Infrastructure
 </footer>
 
 </div>
 </div>
 
 <script>
-function login(){
-  if(user.value==="demo"&&pass.value==="cliq2026"){
-    login.style.display="none";
+function doLogin(){
+  const u=document.getElementById("user").value;
+  const p=document.getElementById("pass").value;
+  const loginScreen=document.getElementById("loginScreen");
+  const app=document.getElementById("app");
+  const error=document.getElementById("error");
+
+  if(u==="demo" && p==="cliq2026"){
+    loginScreen.style.display="none";
     app.style.display="block";
+    window.scrollTo(0,0);
   }else{
     error.innerText="Invalid credentials";
   }
