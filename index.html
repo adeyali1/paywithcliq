@@ -1,409 +1,332 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <title>Pay with CliQ — AI Confirmation Infrastructure</title>
+    <title>MASA Pay — AI Confirmation Infrastructure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <style>
+        /* --- VARIABLES --- */
         :root {
-            --bg: #06080c;
-            --panel: #0c111a;
-            --primary: #00ffb2;
-            --secondary: #6a7cff;
-            --muted: #9aa4b2;
-            --glow: rgba(0, 255, 178, 0.15);
+            --bg: #050507;
+            --primary: #3b82f6; /* Masa Blue */
+            --primary-glow: rgba(59, 130, 246, 0.4);
+            --accent: #8b5cf6; /* AI Purple */
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Inter, sans-serif
-        }
-
+        /* --- RESET --- */
+        * { box-sizing: border-box; outline: none; margin: 0; padding: 0; }
+        
         body {
-            background: radial-gradient(circle at top, #0b1220, #04060a);
-            color: #fff;
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* LOGIN */
-        #login {
-            position: fixed;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle, #0b1c30, #020409);
-            z-index: 999;
+        /* --- LOGIN SCREEN --- */
+        #login-screen {
+            position: fixed; inset: 0; background: #000; z-index: 99999;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+            transition: opacity 0.5s ease;
         }
-
         .login-box {
-            width: 340px;
-            padding: 40px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, .06);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 40px 120px rgba(0, 0, 0, .8);
+            background: #0f1115; border: 1px solid #222; padding: 40px; border-radius: 20px;
+            width: 320px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+        }
+        .login-input {
+            width: 100%; background: #1a1b20; border: 1px solid #333; color: #fff;
+            padding: 14px; margin-bottom: 12px; border-radius: 8px; text-align: center;
+        }
+        .login-btn {
+            width: 100%; background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: #fff; font-weight: 700; padding: 14px; border-radius: 8px; border: none; cursor: pointer;
         }
 
-        .login-box h2 {
-            text-align: center;
-            color: var(--primary);
-            margin-bottom: 22px
-        }
+        /* --- MAIN APP --- */
+        #app { display: none; } /* Hidden until login */
 
-        .login-box input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 14px;
-            border-radius: 10px;
-            border: none;
-            background: #0b1220;
-            color: #fff;
-        }
+        .container { max-width: 680px; margin: 0 auto; padding: 40px 20px 150px 20px; }
 
-        .login-box button {
-            width: 100%;
-            padding: 14px;
-            border-radius: 10px;
-            border: none;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            font-weight: 600;
-            cursor: pointer;
-            color: #000;
+        /* --- BRANDING --- */
+        header { display: flex; align-items: center; gap: 12px; margin-bottom: 60px; padding-top: 20px; }
+        .logo-icon {
+            width: 40px; height: 40px; background: linear-gradient(135deg, var(--primary), #1d4ed8);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 22px; box-shadow: 0 0 20px var(--primary-glow);
         }
+        .brand-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.4rem; letter-spacing: -0.02em; }
 
-        #error {
-            color: #ff6b6b;
-            text-align: center;
-            font-size: 14px;
-            margin-top: 8px
-        }
-
-        #app {
-            display: none
-        }
-
-        /* GLOBAL */
-        section {
-            padding: 110px 10%;
-            position: relative
-        }
-
-        .center {
-            text-align: center;
-            max-width: 1000px;
-            margin: auto
-        }
-
+        /* --- TYPOGRAPHY --- */
+        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; color: #fff; }
+        
         h1 {
-            font-size: 64px;
-            font-weight: 700;
-            margin-bottom: 20px
+            font-size: 3.2rem; line-height: 1.1; margin-bottom: 24px; letter-spacing: -0.03em;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        h2 {
-            font-size: 38px;
-            color: var(--primary);
-            margin-bottom: 20px
-        }
+        h2 { font-size: 2rem; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
+        p { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 24px; }
+        
+        .highlight { color: #fff; font-weight: 600; }
 
-        p {
-            font-size: 18px;
-            color: var(--muted);
-            line-height: 1.7
-        }
-
-        /* GLOW */
-        .glow {
-            position: absolute;
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, var(--glow), transparent 70%);
-            filter: blur(120px);
-            pointer-events: none;
-            animation: float 14s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translate(-50%, -50%)
-            }
-
-            50% {
-                transform: translate(-48%, -54%)
-            }
-
-            100% {
-                transform: translate(-50%, -50%)
-            }
-        }
-
-        /* GRID + CARDS */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 32px;
-            margin-top: 60px;
-        }
-
+        /* --- CARDS --- */
         .card {
-            background: linear-gradient(180deg, #0e1422, #090d16);
-            padding: 34px;
-            border-radius: 22px;
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05);
-            transition: transform .5s, box-shadow .5s;
-        }
-
-        .card:hover {
-            transform: translateY(-14px) scale(1.04);
-            box-shadow: 0 40px 120px rgba(0, 255, 178, .35);
-        }
-
-        /* WORKFLOW */
-        .workflow {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 24px;
-            justify-content: center;
-            margin-top: 60px;
-        }
-
-        .step {
-            padding: 18px 26px;
-            border-radius: 50px;
-            background: rgba(0, 255, 178, .08);
-            border: 1px solid rgba(0, 255, 178, .35);
-            animation: pulse 3s infinite;
-            backdrop-filter: blur(10px);
-        }
-
-        @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(0, 255, 178, .4)
-            }
-
-            70% {
-                box-shadow: 0 0 0 22px rgba(0, 255, 178, 0)
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(0, 255, 178, 0)
-            }
-        }
-
-        /* DASHBOARD */
-        .dashboard {
-            background: #060b15;
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: inset 0 0 0 1px rgba(0, 255, 178, .25);
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 16px;
-            color: var(--muted)
-        }
-
-        .badge {
-            background: var(--primary);
-            color: #000;
-            padding: 6px 14px;
-            border-radius: 14px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        /* CODE */
-        pre {
-            background: #050914;
-            padding: 28px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
             border-radius: 20px;
-            box-shadow: inset 0 0 0 1px rgba(106, 124, 255, .35);
-            overflow-x: auto;
+            padding: 32px;
+            margin-bottom: 24px;
+            position: relative;
+            transition: 0.3s;
+        }
+        .card:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.1);
+            transform: translateY(-4px);
         }
 
-        code {
-            color: #7cf7ff
+        /* --- VISUALS --- */
+        .orb {
+            position: fixed; border-radius: 50%; filter: blur(100px); z-index: -1; opacity: 0.2;
+            pointer-events: none;
+        }
+        .orb-1 { top: -100px; left: -100px; width: 600px; height: 600px; background: var(--primary); }
+        .orb-2 { bottom: -100px; right: -100px; width: 500px; height: 500px; background: var(--accent); }
+
+        /* --- WORKFLOW --- */
+        .workflow { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+        .step {
+            padding: 10px 20px; border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.85rem; font-weight: 600; display: flex; align-items: center;
+        }
+        .step::after { content: "→"; margin-left: 10px; opacity: 0.4; }
+        .step:last-child { background: var(--primary); color: #000; border-color: var(--primary); }
+        .step:last-child::after { content: none; }
+
+        /* --- MARKET BARS --- */
+        .bar-wrap { margin-bottom: 16px; }
+        .bar-head { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; }
+        .bar-bg { background: rgba(255,255,255,0.1); height: 6px; border-radius: 10px; }
+        .bar-fill { height: 100%; border-radius: 10px; background: #ef4444; width: 0; transition: width 1s ease; }
+
+        /* --- STAT BOXES --- */
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .stat-box {
+            text-align: center; padding: 20px 10px; background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border); border-radius: 16px;
+        }
+        .stat-val { font-size: 1.6rem; font-weight: 800; display: block; color: #fff; }
+        .stat-lbl { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+
+        /* --- BADGE --- */
+        .badge {
+            display: inline-block; padding: 6px 14px; border-radius: 50px;
+            font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); margin-bottom: 16px;
         }
 
-        /* COST */
-        .cost {
-            margin-top: 20px;
-            font-size: 26px;
-            color: var(--primary);
-            font-weight: 600;
-            opacity: .85;
-        }
-
-        /* AI CANVAS */
-        canvas {
-            position: fixed;
-            inset: 0;
-            z-index: -1;
-        }
-
-        footer {
-            text-align: center;
-            padding: 50px;
-            color: #6b7484;
-            font-size: 14px
-        }
     </style>
 </head>
-
 <body>
 
-    <canvas id="ai"></canvas>
-
-    <!-- LOGIN -->
-    <div id="login">
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen">
         <div class="login-box">
-            <h2>Confidential Pitch</h2>
-            <input id="user" placeholder="Username">
-            <input id="pass" type="password" placeholder="Password">
-            <button onclick="login()">Enter</button>
-            <div id="error"></div>
+            <!-- LOGO IN LOGIN -->
+            <div style="display:flex; justify-content:center; margin-bottom:15px;">
+                <div class="logo-icon" style="width:50px; height:50px; font-size:26px;">M</div>
+            </div>
+            <h3 style="margin-bottom: 8px;">MASA PAY</h3>
+            <p style="font-size: 13px; margin-bottom: 24px;">Confidential Investor Deck</p>
+            
+            <input type="text" id="user" class="login-input" placeholder="Username (demo)">
+            <input type="password" id="pass" class="login-input" placeholder="Password (cliq2026)">
+            <button onclick="login()" class="login-btn">Unlock Deck</button>
+            <div id="err" style="color:#ef4444; font-size:12px; margin-top:10px;"></div>
         </div>
     </div>
 
+    <!-- MAIN DECK -->
     <div id="app">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
 
-        <section class="center">
-            <div class="glow" style="top:-200px;left:50%"></div>
-            <h1>Pay with CliQ</h1>
-            <p>
-                A next-generation AI confirmation layer enabling CliQ payments
-                for online platforms, apps, and e-commerce in Jordan.
-            </p>
-        </section>
+        <div class="container">
+            
+            <!-- BRAND HEADER -->
+            <header>
+                <div class="logo-icon">M</div>
+                <div class="brand-name">MASA Pay</div>
+            </header>
 
-        <section>
-            <h2>The Problem</h2>
-            <div class="grid">
-                <div class="card">Most users don’t trust card payments online</div>
-                <div class="card">CliQ exists — but not for automated checkout</div>
-                <div class="card">Manual confirmation blocks scale & growth</div>
-            </div>
-        </section>
+            <!-- HERO -->
+            <section>
+                <div class="badge">Idea Stage</div>
+                <h1>AI confirmation infrastructure that enables Pay with "CliQ" for online platforms.</h1>
+                <p>
+                    A next-generation AI confirmation infrastructure that enables 
+                    <strong>Pay with CliQ</strong> for online platforms.
+                </p>
+            </section>
 
-        <section>
-            <h2>The Solution</h2>
-            <p>
-                A Stripe-like confirmation infrastructure that enables
-                <strong>Pay with CliQ</strong> — without receiving funds, without bank APIs,
-                and without changing merchant settlement flows.
-            </p>
-        </section>
+            <!-- PROBLEM -->
+            <section>
+                <h2>The Problem</h2>
+                <div class="card">
+                    <h3 style="margin-bottom: 15px;">Users trust CliQ, but online checkout is broken.</h3>
+                    <p>
+                        80% of the MENA population is excluded from e-commerce because they don't use cards. 
+                        Merchants are forced to accept manual "screenshot" transfers, which are slow and unscalable.
+                    </p>
+                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border);">
+                        <div style="font-size: 0.9rem; margin-bottom: 15px; color: #fff; font-weight:600;">The Market Reality: Low Card Adoption</div>
+                        <div class="bar-wrap">
+                            <div class="bar-head"><span>Jordan</span> <span style="color:#ef4444">&lt;20% Cards</span></div>
+                            <div class="bar-bg"><div class="bar-fill" style="width: 20%"></div></div>
+                        </div>
+                        <div class="bar-wrap">
+                            <div class="bar-head"><span>Egypt</span> <span style="color:#f97316">~25% Cards</span></div>
+                            <div class="bar-bg"><div class="bar-fill" style="width: 25%; background:#f97316"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-        <section>
-            <h2>How It Works</h2>
-            <div class="workflow">
-                <div class="step">Create Payment Intent</div>
-                <div class="step">User Sends CliQ</div>
-                <div class="step">Merchant Device Signal</div>
-                <div class="step">AI Correlation Engine</div>
-                <div class="step">Instant Confirmation</div>
-            </div>
-        </section>
+            <!-- SOLUTION (Refined Narrative) -->
+            <section>
+                <h2>The Solution</h2>
+                <div class="card" style="background: radial-gradient(circle at top right, rgba(59,130,246,0.1), transparent);">
+                    <h3 style="color: var(--primary); margin-bottom: 12px;">AI Confirmation Infrastructure</h3>
+                    <p>
+                        We do not receive funds. We do not replace the bank. 
+                        We provide a <span class="highlight">verification layer</span> that allows merchants to accept CliQ instantly.
+                    </p>
+                    
+                    <div style="margin-top: 25px;">
+                        <h4 style="font-size: 1rem; margin-bottom: 10px;">How it Works:</h4>
+                        <div class="workflow">
+                            <div class="step">Create Intent</div>
+                            <div class="step">User Sends CliQ</div>
+                            <div class="step">AI Correlation</div>
+                            <div class="step">Confidence Score</div>
+                            <div class="step">Confirmed</div>
+                        </div>
+                    </div>
+                </div>
 
-        <section>
-            <h2>AI at the Core</h2>
-            <div class="grid">
-                <div class="card">Multi-signal payment correlation</div>
-                <div class="card">Confidence scoring per transaction</div>
-                <div class="card">Self-learning confirmation models</div>
-            </div>
-        </section>
+                <!-- AI TECH DEEP DIVE -->
+                <div class="card">
+                    <h3 style="margin-bottom: 15px;">AI at the Core</h3>
+                    <p>
+                        Our Multi-Signal engine ensures 100% accuracy without manual intervention.
+                    </p>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                        <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px;">
+                            <div style="color:var(--accent); font-weight:700; margin-bottom:5px;">Confidence Scoring</div>
+                            <div style="font-size:0.85rem; color:var(--text-muted)">Real-time probabilistic matching of amounts & timestamps.</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:12px;">
+                            <div style="color:var(--primary); font-weight:700; margin-bottom:5px;">Zero-Touch</div>
+                            <div style="font-size:0.85rem; color:var(--text-muted)">No screenshots required. Completely automated flow.</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-        <section>
-            <h2>Merchant Dashboard</h2>
-            <div class="dashboard">
-                <div class="row">Order #9120 <span class="badge">Confirmed</span></div>
-                <div class="row">Amount: 25.00 JOD</div>
-                <div class="row">Method: CliQ</div>
-                <div class="row">AI Confidence: 98.7%</div>
-            </div>
-        </section>
+            <!-- MARKET SIZE -->
+            <section>
+                <h2>Market Opportunity</h2>
+                <div class="stat-grid">
+                    <div class="stat-box">
+                        <span class="stat-val">$57B</span>
+                        <span class="stat-lbl">MENA E-Comm<br>(TAM)</span>
+                    </div>
+                    <div class="stat-box" style="background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3);">
+                        <span class="stat-val" style="color: #60a5fa;">$15B</span>
+                        <span class="stat-lbl">Cash-Reliant<br>(SAM)</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-val" style="color: #34d399;">$250M</span>
+                        <span class="stat-lbl">Jordan GMV<br>(SOM)</span>
+                    </div>
+                </div>
+            </section>
 
-        <section>
-            <h2>Developer API</h2>
-            <pre><code>
-POST /v1/payment_intents
+            <!-- BUSINESS MODEL -->
+            <section>
+                <h2>Business Model</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <!-- FEE -->
+                    <div class="card">
+                        <div class="badge" style="background: rgba(59,130,246,0.2); color: #60a5fa; border:none;">Primary</div>
+                        <h3 style="font-size: 1.2rem;">Transaction Fee</h3>
+                        <div style="font-size: 2.5rem; font-weight: 800; margin: 10px 0;">1.5%</div>
+                        <p style="font-size: 0.9rem;">Per successful confirmation. Just like Stripe, but for transfers.</p>
+                    </div>
+                    <!-- SUB -->
+                    <div class="card">
+                        <div class="badge" style="background: rgba(139,92,246,0.2); color: #c4b5fd; border:none;">Next Stage</div>
+                        <h3 style="font-size: 1.2rem;">SaaS Pro</h3>
+                        <div style="font-size: 2.5rem; font-weight: 800; margin: 10px 0;">$19<span style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">/mo</span></div>
+                        <p style="font-size: 0.9rem;">For advanced analytics, multi-agent support, and accounting.</p>
+                    </div>
+                </div>
+            </section>
 
-{
-  "amount": 25.00,
-  "currency": "JOD",
-  "method": "cliq"
-}
-</code></pre>
-        </section>
+            <!-- THE ASK -->
+            <section>
+                <div class="card" style="text-align: center; border-color: var(--primary); padding: 50px 20px;">
+                    <h2>The Ask</h2>
+                    <div style="font-size: 4rem; font-weight: 800; line-height: 1; margin: 20px 0;">25,000 <span style="font-size: 1.5rem; color: var(--text-muted);">JOD</span></div>
+                    <p style="margin-bottom: 30px; max-width: 400px; margin-left: auto; margin-right: auto;">
+                        To build the MVP, train the AI confirmation models, and secure the first 50 pilot merchants in Jordan.
+                    </p>
+                    <div style="font-size: 0.9rem; color: var(--text-muted);">
+                        Contact: founder@masa.pay
+                    </div>
+                </div>
+            </section>
 
-        <section class="center">
-            <h2>Project Cost</h2>
-            <div class="cost">25,000 JOD — full platform delivery</div>
-        </section>
-
-        <section class="center">
-            <h2>Execution</h2>
-            <p>
-                Led by an experienced CTO responsible for architecture,
-                infrastructure, security, and AI-driven decision systems.
-            </p>
-        </section>
-
-        <footer>
-            Pay with CliQ — AI Confirmation Infrastructure<br>
-            Confidential Pitch
-        </footer>
-
+        </div>
     </div>
 
+    <!-- LOGIC -->
     <script>
-        /* LOGIN */
-        const loginEl = document.getElementById("login"),
-            appEl = document.getElementById("app"),
-            err = document.getElementById("error");
-        if (localStorage.getItem("auth")) { loginEl.style.display = "none"; appEl.style.display = "block" }
         function login() {
-            if (user.value === "demo" && pass.value === "cliq2026") {
-                localStorage.setItem("auth", "1");
-                loginEl.style.display = "none"; appEl.style.display = "block";
-            } else err.innerText = "Invalid credentials";
+            const u = document.getElementById('user').value;
+            const p = document.getElementById('pass').value;
+            const screen = document.getElementById('login-screen');
+            const app = document.getElementById('app');
+            const err = document.getElementById('err');
+
+            if (u === 'demo' && p === 'cliq2026') {
+                screen.style.opacity = '0';
+                setTimeout(() => {
+                    screen.style.display = 'none';
+                    app.style.display = 'block';
+                    // Trigger animations
+                    setTimeout(() => {
+                        document.querySelectorAll('.bar-fill').forEach(el => el.style.width = el.style.width);
+                    }, 100);
+                }, 500);
+            } else {
+                err.innerText = "Invalid Credentials";
+            }
         }
 
-        /* AI CANVAS */
-        const c = document.getElementById("ai"), x = c.getContext("2d");
-        let w, h, n = [];
-        function r() { w = c.width = innerWidth; h = c.height = innerHeight }
-        r(); addEventListener("resize", r);
-        for (let i = 0; i < 140; i++)n.push({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - .5) * .4, vy: (Math.random() - .5) * .4 });
-        (function a() {
-            x.clearRect(0, 0, w, h);
-            for (let i = 0; i < n.length; i++) {
-                let p = n[i]; p.x += p.vx; p.y += p.vy;
-                if (p.x < 0 || p.x > w) p.vx *= -1;
-                if (p.y < 0 || p.y > h) p.vy *= -1;
-                x.fillStyle = "rgba(0,255,178,.6)"; x.fillRect(p.x, p.y, 2, 2);
-                for (let j = i + 1; j < n.length; j++) {
-                    let q = n[j], d = Math.hypot(p.x - q.x, p.y - q.y);
-                    if (d < 120) {
-                        x.strokeStyle = "rgba(0,255,178,.12)";
-                        x.beginPath(); x.moveTo(p.x, p.y); x.lineTo(q.x, q.y); x.stroke()
-                    }
-                }
-            }
-            requestAnimationFrame(a)
-        })();
+        // Enter key
+        document.getElementById('pass').addEventListener('keyup', e => { if(e.key === 'Enter') login() });
     </script>
-
 </body>
-
 </html>
