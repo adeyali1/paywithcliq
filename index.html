@@ -1,367 +1,297 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>MASA Pay — The API for Mobile Wallets</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<title>Pay with CliQ — AI Confirmation Infrastructure</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <style>
-        /* --- DESIGN TOKENS --- */
-        :root {
-            --bg: #030304;
-            --surface: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08);
-            --primary: #3b82f6; /* Masa Blue */
-            --accent: #8b5cf6;  /* AI Purple */
-            --text-main: #ffffff;
-            --text-muted: #94a3b8;
-            --glow: rgba(59, 130, 246, 0.15);
-        }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
-        /* --- RESET --- */
-        * { box-sizing: border-box; outline: none; margin: 0; padding: 0; }
-        
-        body {
-            background-color: var(--bg);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
+<style>
+:root {
+  --bg:#050507;
+  --card:#0e1015;
+  --primary:#7c7cff;
+  --accent:#22d3ee;
+  --text:#ffffff;
+  --muted:#9ca3af;
+  --border:rgba(255,255,255,.08);
+}
 
-        /* --- ANIMATED BACKGROUND --- */
-        .orb {
-            position: fixed; border-radius: 50%; filter: blur(120px); z-index: -1; opacity: 0.3;
-            pointer-events: none; animation: float 10s ease-in-out infinite alternate;
-        }
-        .orb-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: radial-gradient(circle, var(--primary), transparent 70%); }
-        .orb-2 { bottom: -10%; right: -10%; width: 40vw; height: 40vw; background: radial-gradient(circle, var(--accent), transparent 70%); }
-        
-        @keyframes float { 0% { transform: translate(0,0); } 100% { transform: translate(20px, 40px); } }
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,sans-serif;
+}
 
-        /* --- LAYOUT --- */
-        #app { display: none; } /* Hidden until login */
-        .container { max-width: 650px; margin: 0 auto; padding: 40px 20px 150px 20px; }
+/* LOGIN */
+#login{
+  position:fixed;inset:0;
+  background:#020202;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:999;
+}
+.login-box{
+  background:#111;
+  border:1px solid #333;
+  padding:36px;
+  border-radius:18px;
+  width:300px;
+  text-align:center;
+}
+.login-box input{
+  width:100%;
+  padding:12px;
+  margin-bottom:12px;
+  background:#222;
+  border:1px solid #444;
+  border-radius:8px;
+  color:#fff;
+  text-align:center;
+}
+.login-box button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  background:var(--primary);
+  font-weight:700;
+  cursor:pointer;
+}
+#error{color:#ef4444;font-size:12px;margin-top:8px}
 
-        /* --- TYPOGRAPHY --- */
-        h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; color: #fff; line-height: 1.1; }
-        
-        h1 {
-            font-size: 3.5rem; letter-spacing: -0.04em; margin-bottom: 24px;
-            background: linear-gradient(180deg, #fff 0%, #94a3b8 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+/* APP */
+#app{display:none}
 
-        h2 { font-size: 2rem; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
-        p { color: var(--text-muted); font-size: 1.125rem; margin-bottom: 24px; }
-        .highlight { color: #fff; font-weight: 600; text-decoration: underline; text-decoration-color: rgba(59,130,246,0.5); text-underline-offset: 4px; }
+.wrapper{
+  max-width:390px;
+  margin:0 auto;
+  padding:60px 16px 120px;
+}
 
-        /* --- COMPONENTS: CARDS --- */
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 32px;
-            margin-bottom: 24px;
-            position: relative;
-            transform-style: preserve-3d; /* For Tilt */
-            transition: border-color 0.3s, box-shadow 0.3s;
-            backdrop-filter: blur(10px);
-        }
-        
-        /* 3D Tilt Logic handled by JS, but hover state helps */
-        .card:hover {
-            border-color: rgba(59, 130, 246, 0.4);
-            box-shadow: 0 0 40px var(--glow);
-        }
+/* CARDS */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:24px;
+  margin-bottom:28px;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
 
-        /* --- COMPONENTS: BADGES & BUTTONS --- */
-        .badge {
-            display: inline-block; padding: 6px 14px; border-radius: 100px;
-            font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;
-        }
+.badge{
+  display:inline-block;
+  font-size:11px;
+  font-weight:700;
+  padding:6px 12px;
+  border-radius:999px;
+  background:rgba(124,124,255,.15);
+  color:var(--primary);
+  margin-bottom:14px;
+}
 
-        .source-btn {
-            display: inline-flex; align-items: center; gap: 6px;
-            font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;
-            border: 1px solid rgba(255,255,255,0.08); padding: 4px 10px; border-radius: 100px;
-            text-decoration: none; margin-top: 8px; transition: 0.2s; background: rgba(0,0,0,0.3);
-        }
-        .source-btn:hover { border-color: var(--primary); color: #fff; background: rgba(59,130,246,0.1); }
-        .source-btn::after { content: "↗"; font-family: sans-serif; }
+h1,h2,h3{
+  font-family:"Space Grotesk",sans-serif;
+}
+h1{font-size:32px;line-height:1.1;margin-bottom:14px}
+h2{font-size:22px;margin-bottom:12px}
+h3{font-size:16px;margin-bottom:8px}
 
-        /* --- COMPONENTS: DATA BARS --- */
-        .bar-wrap { margin-bottom: 18px; }
-        .bar-head { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 8px; font-weight: 500; }
-        .bar-bg { background: rgba(255,255,255,0.08); height: 6px; border-radius: 10px; overflow: hidden; }
-        .bar-fill { height: 100%; border-radius: 10px; width: 0; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
-        .fill-red { background: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
-        .fill-orange { background: #f97316; }
+p{
+  font-size:15px;
+  color:var(--muted);
+  line-height:1.6;
+}
 
-        /* --- COMPONENTS: WORKFLOW --- */
-        .workflow { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 25px; }
-        .step {
-            padding: 8px 16px; border-radius: 100px;
-            background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2);
-            color: #60a5fa; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center;
-        }
-        .step::after { content: "→"; margin-left: 10px; opacity: 0.4; }
-        .step:last-child { background: var(--primary); color: #000; border-color: var(--primary); }
-        .step:last-child::after { content: none; }
+/* WORKFLOW */
+.flow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:14px;
+}
+.step{
+  padding:6px 14px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:600;
+  background:rgba(124,124,255,.15);
+  color:#c7d2fe;
+}
 
-        /* --- STAT GRID --- */
-        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-        .stat-box {
-            text-align: center; padding: 20px 8px; background: rgba(0,0,0,0.2);
-            border: 1px solid var(--border); border-radius: 18px;
-        }
-        .stat-val { font-size: 1.5rem; font-weight: 800; display: block; color: #fff; line-height: 1.2; }
-        .stat-lbl { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); margin-top: 6px; letter-spacing: 0.5px; }
+/* STATS */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.stat{
+  background:#0a0c11;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  text-align:center;
+}
+.stat strong{
+  display:block;
+  font-size:18px;
+  color:#fff;
+}
+.stat span{
+  font-size:10px;
+  color:var(--muted);
+  text-transform:uppercase;
+}
 
-        /* --- LOGIN SCREEN --- */
-        #login-screen {
-            position: fixed; inset: 0; background: #000; z-index: 99999;
-            display: flex; align-items: center; justify-content: center; flex-direction: column;
-            transition: opacity 0.6s ease;
-        }
-        .login-box {
-            background: #0a0a0a; border: 1px solid #222; padding: 40px; border-radius: 24px;
-            width: 320px; text-align: center;
-        }
-        .login-input {
-            width: 100%; background: #161616; border: 1px solid #333; color: #fff;
-            padding: 14px; margin-bottom: 12px; border-radius: 10px; text-align: center; font-size: 16px;
-        }
-        .login-btn {
-            width: 100%; background: #fff; color: #000; font-weight: 700; padding: 14px;
-            border-radius: 10px; border: none; cursor: pointer; margin-top: 8px; transition: 0.2s;
-        }
-        .login-btn:hover { background: #ddd; }
+/* ASK */
+.ask{
+  text-align:center;
+}
+.ask .amount{
+  font-size:42px;
+  font-weight:800;
+  margin:14px 0;
+  color:var(--primary);
+}
+.ask small{
+  color:var(--muted);
+}
 
-    </style>
+/* FOOTER */
+footer{
+  text-align:center;
+  font-size:11px;
+  color:#6b7280;
+  margin-top:40px;
+}
+</style>
 </head>
+
 <body>
 
-    <!-- 1. LOGIN SCREEN -->
-    <div id="login-screen">
-        <div class="login-box">
-            <div style="font-family:'Space Grotesk'; font-weight:700; font-size:24px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; gap:10px;">
-                <span style="width:30px; height:30px; background:var(--primary); border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:16px;">M</span>
-                MASA PAY
-            </div>
-            <p style="font-size: 13px; margin-bottom: 24px; color:#666;">Confidential Investor Deck</p>
-            
-            <input type="text" id="user" class="login-input" placeholder="Username">
-            <input type="password" id="pass" class="login-input" placeholder="Password">
-            <button onclick="login()" class="login-btn">Access Deck</button>
-            <div id="err" style="color:#ef4444; font-size:12px; margin-top:15px; min-height:18px;"></div>
-        </div>
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-box">
+    <h3 style="margin-bottom:10px">MASA PAY</h3>
+    <input id="user" placeholder="Username (demo)">
+    <input id="pass" type="password" placeholder="Password (cliq2026)">
+    <button onclick="login()">Access Deck</button>
+    <div id="error"></div>
+  </div>
+</div>
+
+<div id="app">
+<div class="wrapper">
+
+<!-- COVER -->
+<div class="card">
+  <span class="badge">Pre-Seed</span>
+  <h1>Pay with CliQ</h1>
+  <p>
+    An AI-powered confirmation layer enabling CliQ payments
+    for online platforms, apps, and e-commerce in Jordan.
+  </p>
+</div>
+
+<!-- PROBLEM -->
+<div class="card">
+  <h2>The Problem</h2>
+  <p>
+    Most users trust CliQ more than cards.
+    Yet online checkout still depends on card payments.
+  </p>
+  <p>
+    Merchants are forced into Cash on Delivery or
+    manual confirmation — breaking automation and scale.
+  </p>
+</div>
+
+<!-- SOLUTION -->
+<div class="card">
+  <h2>Our Solution</h2>
+  <p>
+    We introduce a <strong>non-custodial AI verification layer</strong>
+    that confirms CliQ payments without receiving funds
+    or integrating with banks.
+  </p>
+</div>
+
+<!-- PRODUCT -->
+<div class="card">
+  <h2>How It Works</h2>
+  <div class="flow">
+    <div class="step">Create Intent</div>
+    <div class="step">User Sends CliQ</div>
+    <div class="step">Confirmation Signal</div>
+    <div class="step">AI Evaluation</div>
+    <div class="step">Confirmed</div>
+  </div>
+</div>
+
+<!-- AI -->
+<div class="card">
+  <h2>Why AI?</h2>
+  <p>
+    CliQ was built for peer-to-peer transfers,
+    not automated checkout.
+  </p>
+  <p>
+    Our AI engine correlates context, timing,
+    and merchant-side signals to determine
+    payment completion with high confidence.
+  </p>
+</div>
+
+<!-- MARKET -->
+<div class="card">
+  <h2>Market Opportunity</h2>
+  <div class="stats">
+    <div class="stat">
+      <strong>$250M</strong>
+      <span>Jordan GMV</span>
     </div>
-
-    <!-- 2. APP CONTENT -->
-    <div id="app">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-
-        <div class="container">
-            
-            <!-- HEADER -->
-            <div style="display:flex; align-items:center; gap:12px; margin-bottom:60px;">
-                <div style="width:40px; height:40px; background:linear-gradient(135deg, var(--primary), #1e40af); border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:20px; box-shadow:0 0 20px rgba(59,130,246,0.3);">M</div>
-                <div style="font-family:'Space Grotesk'; font-weight:700; font-size:1.4rem;">MASA Pay</div>
-            </div>
-
-            <!-- HERO -->
-            <section>
-                <div class="badge">Idea Stage</div>
-                <h1>Accept Mobile Wallets Online. Instantly.</h1>
-                <p>
-                    The AI verification infrastructure that turns manual transfers (CliQ, InstaPay) into automated checkout.
-                </p>
-            </section>
-
-            <!-- PROBLEM -->
-            <section>
-                <h2>The Gap</h2>
-                <div class="card js-tilt">
-                    <h3 style="margin-bottom: 16px; font-size: 1.25rem;">Online checkout is broken for 80% of MENA.</h3>
-                    <p>
-                        Customers have money in Mobile Wallets (CliQ, ZainCash, Vodafone Cash), but merchants can only accept manual screenshots. It's slow and kills conversion.
-                    </p>
-                    
-                    <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border);">
-                        <div style="font-size: 0.9rem; margin-bottom: 20px; color: #fff; font-weight:600;">The "Cash Trap" Reality</div>
-                        
-                        <!-- JORDAN -->
-                        <div class="bar-wrap">
-                            <div class="bar-head"><span>Jordan</span> <span style="color:#ef4444">&lt;20% Card Usage</span></div>
-                            <div class="bar-bg"><div class="bar-fill fill-red" style="width: 20%"></div></div>
-                            <a href="https://www.zawya.com/en/economy/levant/jordan-36bln-in-money-transfers-via-cliq-in-first-2-months-of-2025-k0fw2bgf" target="_blank" class="source-btn">Data: Zawya / KoreFusion</a>
-                        </div>
-
-                        <!-- EGYPT -->
-                        <div class="bar-wrap">
-                            <div class="bar-head"><span>Egypt</span> <span style="color:#f97316">~25% Card Usage</span></div>
-                            <div class="bar-bg"><div class="bar-fill fill-orange" style="width: 25%"></div></div>
-                            <a href="https://noda.live/articles/most-popular-payment-methods-by-country" target="_blank" class="source-btn">Data: Noda.live</a>
-                        </div>
-
-                         <!-- IRAQ -->
-                         <div class="bar-wrap">
-                            <div class="bar-head"><span>Iraq</span> <span style="color:#ef4444">&lt;15% Card Usage</span></div>
-                            <div class="bar-bg"><div class="bar-fill fill-red" style="width: 15%"></div></div>
-                            <a href="https://www.researchandmarkets.com/reports/5898140/middle-east-online-payment-methods" target="_blank" class="source-btn">Data: ResearchAndMarkets</a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- SOLUTION -->
-            <section>
-                <h2>The Solution</h2>
-                <div class="card js-tilt" style="background: radial-gradient(circle at top right, rgba(59,130,246,0.1), transparent);">
-                    <h3 style="color: var(--primary); margin-bottom: 12px;">AI Verification Agent</h3>
-                    <p>
-                        We do not replace the bank. We act as a <span class="highlight">Confirmation Layer</span>. 
-                        Our AI correlates wallet transfers to orders in real-time.
-                    </p>
-                    
-                    <div class="workflow">
-                        <div class="step">Create Intent</div>
-                        <div class="step">User Sends Funds</div>
-                        <div class="step">AI Correlation</div>
-                        <div class="step">Confidence Score</div>
-                        <div class="step">Confirmed</div>
-                    </div>
-                </div>
-
-                <div class="card js-tilt">
-                    <h3 style="margin-bottom: 15px;">Why it works</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div>
-                            <div style="color:#fff; font-weight:600; margin-bottom:6px;">Universal</div>
-                            <div style="font-size:0.9rem; color:var(--text-muted);">Works with any wallet that sends notifications (CliQ, InstaPay, etc).</div>
-                        </div>
-                        <div>
-                            <div style="color:#fff; font-weight:600; margin-bottom:6px;">Zero-Touch</div>
-                            <div style="font-size:0.9rem; color:var(--text-muted);">No screenshots. No human verification. 100% automated.</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- MARKET SIZE -->
-            <section>
-                <h2>Market Size</h2>
-                <div class="stat-grid">
-                    <div class="stat-box">
-                        <span class="stat-val">$57B</span>
-                        <span class="stat-lbl">MENA E-Comm<br>(TAM)</span>
-                    </div>
-                    <div class="stat-box" style="background: rgba(59,130,246,0.1); border-color: rgba(59,130,246,0.3);">
-                        <span class="stat-val" style="color: #60a5fa;">$15B</span>
-                        <span class="stat-lbl">Non-Card Vol<br>(SAM)</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-val" style="color: #34d399;">$250M</span>
-                        <span class="stat-lbl">Jordan GMV<br>(SOM)</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- BUSINESS MODEL -->
-            <section>
-                <h2>Business Model</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div class="card js-tilt">
-                        <div class="badge" style="background: rgba(59,130,246,0.2); color: #60a5fa; border:none; margin-bottom:12px;">Primary</div>
-                        <h3 style="font-size: 1.2rem;">Transaction Fee</h3>
-                        <div style="font-size: 2.2rem; font-weight: 800; margin: 10px 0;">1.5%</div>
-                        <p style="font-size: 0.9rem;">Per successful confirmation. Scaling with merchant volume.</p>
-                    </div>
-                    <div class="card js-tilt">
-                        <div class="badge" style="background: rgba(139,92,246,0.2); color: #c4b5fd; border:none; margin-bottom:12px;">Growth</div>
-                        <h3 style="font-size: 1.2rem;">SaaS Pro</h3>
-                        <div style="font-size: 2.2rem; font-weight: 800; margin: 10px 0;">$19<span style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">/mo</span></div>
-                        <p style="font-size: 0.9rem;">Advanced analytics, multi-agent support, and accounting.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- THE ASK -->
-            <section>
-                <div class="card js-tilt" style="text-align: center; border-color: var(--primary); padding: 50px 20px;">
-                    <h2>The Ask</h2>
-                    <div style="font-size: 4rem; font-weight: 800; line-height: 1; margin: 20px 0;">25,000 <span style="font-size: 1.5rem; color: var(--text-muted);">JOD</span></div>
-                    <p style="margin-bottom: 30px; max-width: 400px; margin-left: auto; margin-right: auto;">
-                        To build the MVP, train the AI confirmation models, and secure the first 50 pilot merchants.
-                    </p>
-                    <div style="font-size: 0.9rem; color: var(--text-muted);">
-                        Contact: founder@masa.pay
-                    </div>
-                </div>
-            </section>
-
-        </div>
+    <div class="stat">
+      <strong>$15B</strong>
+      <span>Cash-Heavy MENA</span>
     </div>
+    <div class="stat">
+      <strong>High</strong>
+      <span>Adoption</span>
+    </div>
+  </div>
+</div>
 
-    <!-- 3. JAVASCRIPT LOGIC -->
-    <script>
-        // LOGIN
-        function login() {
-            const u = document.getElementById('user').value;
-            const p = document.getElementById('pass').value;
-            const screen = document.getElementById('login-screen');
-            const app = document.getElementById('app');
-            const err = document.getElementById('err');
+<!-- ASK -->
+<div class="card ask">
+  <h2>The Ask</h2>
+  <div class="amount">25,000 JOD</div>
+  <small>
+    To build the MVP, deploy the AI confirmation engine,
+    and onboard initial pilot merchants.
+  </small>
+</div>
 
-            if (u === 'demo' && p === 'cliq2026') {
-                screen.style.opacity = '0';
-                setTimeout(() => {
-                    screen.style.display = 'none';
-                    app.style.display = 'block';
-                    
-                    // Trigger Animations
-                    setTimeout(() => {
-                        document.querySelectorAll('.bar-fill').forEach(bar => {
-                            bar.style.width = bar.style.width; // Refresh reflow
-                        });
-                    }, 100);
+<footer>
+Pay with CliQ — AI Confirmation Infrastructure<br>
+Confidential Pitch
+</footer>
 
-                }, 500);
-            } else {
-                err.innerText = "Invalid Username or Password";
-            }
-        }
-        
-        document.getElementById('pass').addEventListener('keyup', e => { if(e.key === 'Enter') login() });
+</div>
+</div>
 
-        // 3D TILT EFFECT
-        document.querySelectorAll('.js-tilt').forEach(card => {
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                // Max tilt degrees
-                const rotateX = ((y - centerY) / centerY) * -5;
-                const rotateY = ((x - centerX) / centerX) * 5;
+<script>
+function login(){
+  if(user.value==="demo"&&pass.value==="cliq2026"){
+    login.style.display="none";
+    app.style.display="block";
+  }else{
+    error.innerText="Invalid credentials";
+  }
+}
+</script>
 
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-            });
-
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-            });
-        });
-    </script>
 </body>
 </html>
