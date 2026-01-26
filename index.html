@@ -13,12 +13,18 @@
         /* --- TOKENS --- */
         :root {
             --bg: #030304;
-            --surface: rgba(255, 255, 255, 0.03);
+            --surface: #0a0a0c;
             --border: rgba(255, 255, 255, 0.08);
-            --primary: #3b82f6; 
-            --accent: #8b5cf6;
-            --success: #10b981;
-            --danger: #ef4444;
+            
+            /* NMBR Brand Colors */
+            --c-problem: #ef4444; 
+            --c-solution: #22c55e;
+            --c-product: #a855f7;
+            --c-whynow: #3b82f6; 
+            --c-comp: #f97316;   
+            --c-moat: #eab308;   
+            --c-traction: #ec4899; 
+            
             --text-main: #ffffff;
             --text-muted: #94a3b8;
         }
@@ -35,30 +41,20 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- BACKGROUND FX --- */
-        .orb {
-            position: fixed; border-radius: 50%; filter: blur(140px); z-index: -1; opacity: 0.25;
-            pointer-events: none; animation: float 12s ease-in-out infinite alternate;
-        }
-        .orb-1 { top: -20%; left: -20%; width: 60vw; height: 60vw; background: radial-gradient(circle, var(--primary), transparent 60%); }
-        .orb-2 { bottom: -20%; right: -20%; width: 50vw; height: 50vw; background: radial-gradient(circle, var(--accent), transparent 60%); }
-        
-        @keyframes float { 0% { transform: translate(0,0); } 100% { transform: translate(30px, 50px); } }
-
         /* --- LAYOUT --- */
-        #app { display: none; }
-        .container { max-width: 600px; margin: 0 auto; padding: 40px 20px 150px 20px; }
+        #app { display: none; opacity: 0; transition: opacity 1s ease; }
+        .container { max-width: 550px; margin: 0 auto; padding: 40px 20px 150px 20px; }
 
         /* --- TYPOGRAPHY --- */
         h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; color: #fff; line-height: 1.1; }
         
         h1 {
-            font-size: 3.5rem; letter-spacing: -0.04em; margin-bottom: 24px;
+            font-size: 3rem; letter-spacing: -0.04em; margin-bottom: 24px;
             background: linear-gradient(180deg, #fff 0%, #94a3b8 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        h2 { font-size: 1.8rem; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
+        h2 { font-size: 1.5rem; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; font-weight: 700; }
         p { color: var(--text-muted); font-size: 1rem; margin-bottom: 20px; line-height: 1.6; }
 
         /* --- CARDS --- */
@@ -66,122 +62,390 @@
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 28px;
+            padding: 24px;
             margin-bottom: 20px;
             position: relative;
             transform-style: preserve-3d;
-            transition: border-color 0.3s;
-            backdrop-filter: blur(10px);
+            transition: 0.3s;
         }
-        .card:hover { border-color: rgba(255,255,255,0.2); }
+        .card:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
 
-        /* --- SECTIONS SPECIFIC STYLES --- */
-        .problem-icon { color: var(--danger); background: rgba(239, 68, 68, 0.1); padding: 8px; border-radius: 8px; }
-        .solution-icon { color: var(--success); background: rgba(16, 185, 129, 0.1); padding: 8px; border-radius: 8px; }
+        /* --- ICONS --- */
+        .icon-box {
+            width: 32px; height: 32px; border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .icon-box svg { width: 20px; height: 20px; fill: currentColor; }
         
-        /* --- LISTS --- */
+        /* Section Colors */
+        .problem-color { color: var(--c-problem); background: rgba(239, 68, 68, 0.1); }
+        .solution-color { color: var(--c-solution); background: rgba(34, 197, 94, 0.1); }
+        .product-color { color: var(--c-product); background: rgba(168, 85, 247, 0.1); }
+        .whynow-color { color: var(--c-whynow); background: rgba(59, 130, 246, 0.1); }
+        .comp-color { color: var(--c-comp); background: rgba(249, 115, 22, 0.1); }
+        .moat-color { color: var(--c-moat); background: rgba(234, 179, 8, 0.1); }
+        .traction-color { color: var(--c-traction); background: rgba(236, 72, 153, 0.1); }
+
+        /* --- BULLETS --- */
         .bullet-list { list-style: none; }
-        .bullet-list li {
-            position: relative; padding-left: 24px; margin-bottom: 16px; color: #e2e8f0;
-        }
-        .bullet-list li::before {
-            content: "•"; color: var(--text-muted); position: absolute; left: 0; font-size: 1.2em; top: -2px;
-        }
-        .bullet-list.danger li::before { color: var(--danger); }
-        .bullet-list.success li::before { color: var(--success); }
+        .bullet-list li { position: relative; padding-left: 26px; margin-bottom: 18px; color: #e2e8f0; font-size: 0.95rem; }
+        .bullet-list li::before { content: "•"; position: absolute; left: 6px; top: -2px; font-size: 1.4em; font-weight: bold; }
+        .problem-section .bullet-list li::before { color: var(--c-problem); }
+        .whynow-section .bullet-list li::before { color: var(--c-whynow); }
+        .moat-section .bullet-list li::before { color: var(--c-moat); }
 
-        /* --- DATA BARS --- */
-        .bar-wrap { margin-bottom: 18px; }
-        .bar-head { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px; font-weight: 600; text-transform: uppercase; }
-        .bar-bg { background: rgba(255,255,255,0.08); height: 6px; border-radius: 10px; overflow: hidden; }
-        .bar-fill { height: 100%; border-radius: 10px; width: 0; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
-        .fill-red { background: var(--danger); }
-        .fill-orange { background: #f97316; }
-
-        .source-btn {
-            display: inline-flex; align-items: center; gap: 4px;
-            font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b;
-            border: 1px solid rgba(255,255,255,0.08); padding: 3px 8px; border-radius: 100px;
-            text-decoration: none; margin-top: 6px; transition: 0.2s;
-        }
-        .source-btn:hover { border-color: var(--primary); color: #fff; }
+        /* --- BENTO --- */
+        .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .bento-item { background: rgba(255,255,255,0.03); padding: 16px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
+        .bento-icon { font-size: 1.5rem; margin-bottom: 8px; display: block; }
+        .bento-title { font-weight: 700; font-size: 0.9rem; color: #fff; margin-bottom: 4px; }
+        .bento-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
 
         /* --- TIMELINE --- */
-        .timeline { padding-left: 20px; border-left: 2px solid var(--border); margin-left: 10px; margin-top: 20px; }
-        .t-item { position: relative; padding-left: 30px; margin-bottom: 30px; }
-        .t-item::before {
-            content: ''; position: absolute; left: -26px; top: 0; width: 10px; height: 10px;
-            border-radius: 50%; background: var(--bg); border: 2px solid var(--primary);
-        }
-        .t-item.active::before { background: var(--primary); box-shadow: 0 0 10px var(--primary); }
+        .timeline { position: relative; padding-left: 20px; margin-top: 10px; }
+        .timeline::before { content: ''; position: absolute; left: 6px; top: 10px; bottom: 20px; width: 2px; background: rgba(255,255,255,0.1); }
+        .timeline-item { position: relative; padding-left: 24px; margin-bottom: 32px; }
+        .timeline-dot { position: absolute; left: 0; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 2px solid; z-index: 2; }
+        .tag { display: inline-block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; margin-bottom: 6px; }
 
-        /* --- LOGIN --- */
+        /* --- DATA BARS --- */
+        .bar-wrap { margin-bottom: 16px; }
+        .bar-head { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px; font-weight: 600; text-transform: uppercase; }
+        .bar-bg { background: rgba(255,255,255,0.08); height: 6px; border-radius: 10px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 10px; width: 0; transition: width 1s ease; }
+        .source-btn { display: inline-flex; align-items: center; gap: 4px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; border: 1px solid rgba(255,255,255,0.08); padding: 4px 10px; border-radius: 100px; text-decoration: none; margin-top: 6px; transition: 0.2s; background: rgba(0,0,0,0.3); }
+        .source-btn:hover { border-color: var(--c-whynow); color: #fff; }
+
+        /* --- LOGIN SCREEN --- */
         #login-screen {
-            position: fixed; inset: 0; background: #000; z-index: 99999;
+            position: fixed; inset: 0; background: #020202; z-index: 99999;
             display: flex; align-items: center; justify-content: center; flex-direction: column;
+            transition: opacity 0.8s ease;
         }
-        .login-box { width: 300px; text-align: center; }
+        
+        /* Canvas Background */
+        #login-bg { position: absolute; inset: 0; z-index: -1; }
+
+        .login-card {
+            background: rgba(15, 15, 20, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 24px;
+            width: 340px;
+            text-align: center;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+            animation: fadeIn 1s ease-out;
+        }
+
+        .login-logo {
+            width: 60px; height: 60px; margin: 0 auto 20px auto;
+            background: linear-gradient(135deg, var(--c-whynow), #1e40af);
+            border-radius: 16px; display: flex; align-items: center; justify-content: center;
+            font-size: 32px; font-weight: 800; color: #fff;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+        }
+
         .login-input {
-            width: 100%; background: #161616; border: 1px solid #333; color: #fff;
-            padding: 12px; margin-bottom: 12px; border-radius: 8px; text-align: center;
+            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 14px; margin-bottom: 12px; border-radius: 12px;
+            text-align: center; font-size: 16px; transition: 0.3s;
         }
+        .login-input:focus { border-color: var(--c-whynow); background: rgba(59,130,246,0.1); }
+        
         .login-btn {
-            width: 100%; background: #fff; color: #000; font-weight: 700; padding: 12px;
-            border-radius: 8px; border: none; cursor: pointer;
+            width: 100%; background: #fff; color: #000; font-weight: 700; padding: 14px;
+            border-radius: 12px; border: none; cursor: pointer; transition: 0.3s; font-size: 16px;
         }
+        .login-btn:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(255,255,255,0.3); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
     </style>
 </head>
 <body>
 
-    <!-- LOGIN -->
+    <!-- SVG SYMBOLS -->
+    <svg style="display:none;">
+        <symbol id="icon-bulb" viewBox="0 0 24 24"><path d="M9 21h6v-2H9v2zm3-19C8.1 2 5 5.1 5 9c0 2.4 1.2 4.5 3 5.7V17c0 .5.4 1 1 1h6c.6 0 1-.5 1-1v-2.3c1.8-1.3 3-3.4 3-5.7 0-3.9-3.1-7-7-7z"/></symbol>
+        <symbol id="icon-warning" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></symbol>
+        <symbol id="icon-product" viewBox="0 0 24 24"><path d="M17 1H7c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V5h10v14z"/></symbol>
+        <symbol id="icon-clock" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></symbol>
+        <symbol id="icon-chart" viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></symbol>
+        <symbol id="icon-money" viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></symbol>
+        <symbol id="icon-target" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5.5-8c0-3.03 2.47-5.5 5.5-5.5s5.5 2.47 5.5 5.5-2.47 5.5-5.5 5.5-5.5-2.47-5.5-5.5z"/></symbol>
+        <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></symbol>
+        <symbol id="icon-map" viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></symbol>
+        <symbol id="icon-rocket" viewBox="0 0 24 24"><path d="M9 19h6v2H9zM20 6c0-3.31-2.69-6-6-6s-6 2.69-6 6c0 2.12 1.09 3.98 2.72 5.12L8 20h8l-2.72-8.88C18.91 9.98 20 8.12 20 6z"/></symbol>
+        <symbol id="icon-group" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></symbol>
+    </svg>
+
+    <!-- 1. LOGIN SCREEN -->
     <div id="login-screen">
-        <div class="login-box">
-            <div style="font-family:'Space Grotesk'; font-weight:700; font-size:24px; margin-bottom:10px;">MASA PAY</div>
-            <input type="text" id="user" class="login-input" placeholder="Username">
-            <input type="password" id="pass" class="login-input" placeholder="Password">
-            <button onclick="login()" class="login-btn">View Pitch</button>
-            <div id="err" style="color:#ef4444; font-size:12px; margin-top:10px; min-height:18px;"></div>
+        <canvas id="login-bg"></canvas>
+        <div class="login-card">
+            <div class="login-logo">M</div>
+            <h2 style="justify-content:center; margin-bottom: 5px;">MASA PAY</h2>
+            <p style="font-size:12px; margin-bottom:25px; color:#aaa;">Secure Investor Access</p>
+            
+            <input type="text" id="user" class="login-input" placeholder="Username (demo)">
+            <input type="password" id="pass" class="login-input" placeholder="Password (cliq2026)">
+            <button onclick="login()" class="login-btn">Unlock Pitch</button>
+            <div id="err" style="color:#ef4444; font-size:12px; margin-top:15px; height:20px;"></div>
         </div>
     </div>
 
-    <!-- CONTENT -->
+    <!-- 2. MAIN APP -->
     <div id="app">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
+        <!-- Background Orbs for App -->
+        <div style="position:fixed; top:-10%; left:-10%; width:600px; height:600px; background:radial-gradient(circle, var(--c-whynow), transparent 70%); opacity:0.15; filter:blur(100px); z-index:-1;"></div>
+        <div style="position:fixed; bottom:-10%; right:-10%; width:500px; height:500px; background:radial-gradient(circle, var(--c-product), transparent 70%); opacity:0.15; filter:blur(100px); z-index:-1;"></div>
 
         <div class="container">
             
-            <!-- HEADER -->
-            <div style="display:flex; align-items:center; gap:12px; margin-bottom:60px;">
-                <div style="width:36px; height:36px; background:linear-gradient(135deg, var(--primary), #1e40af); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px;">M</div>
+            <!-- Header -->
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:50px;">
+                <div style="width:36px; height:36px; background:linear-gradient(135deg, var(--c-whynow), #1e40af); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; box-shadow:0 0 20px rgba(59,130,246,0.3);">M</div>
                 <div style="font-family:'Space Grotesk'; font-weight:700; font-size:1.2rem;">MASA Pay</div>
             </div>
 
-            <!-- HERO -->
+            <!-- Hero -->
             <section>
-                <div style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.1); border-radius:50px; font-size:0.75rem; font-weight:700; margin-bottom:20px;">IDEA STAGE</div>
+                <div style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.1); border-radius:50px; font-size:0.75rem; font-weight:700; margin-bottom:20px; border:1px solid rgba(255,255,255,0.1);">IDEA STAGE</div>
                 <h1>Accept Mobile Wallets Online. Instantly.</h1>
                 <p>The AI verification infrastructure that turns manual transfers (CliQ, InstaPay, ZainCash) into automated checkout.</p>
             </section>
 
-            <!-- 1. THE PROBLEM -->
-            <section>
-                <h2><span class="problem-icon">⚠</span> The Problem</h2>
-                <div class="card js-tilt" style="border-left: 4px solid var(--danger);">
-                    <ul class="bullet-list danger">
-                        <li><strong>Card adoption is dangerously low.</strong> <br>80% of MENA customers don't use cards online. Merchants relying on cards lose the majority of the market.</li>
-                        <li><strong>Wallets are manual and disconnected.</strong> <br>CliQ and InstaPay are P2P only. Merchants force users to take "Screenshots" of payments. It's unscalable.</li>
-                        <li><strong>Cash on Delivery (COD) kills margins.</strong> <br>High return rates and delayed settlement for merchants who accept cash.</li>
+            <!-- Problem -->
+            <section class="problem-section">
+                <h2><div class="icon-box problem-color"><svg><use href="#icon-warning"></use></svg></div> The Problem</h2>
+                <div class="card js-tilt" style="border-left: 3px solid var(--c-problem);">
+                    <ul class="bullet-list">
+                        <li><strong>Card adoption is dangerously low.</strong><br>80% of MENA customers don't use cards online.</li>
+                        <li><strong>Wallets are broken.</strong><br>CliQ/InstaPay are P2P only. Merchants force users to take manual screenshots.</li>
+                        <li><strong>COD kills margins.</strong><br>High return rates and delayed settlement for cash orders.</li>
                     </ul>
-                    
                     <div style="margin-top:25px; padding-top:20px; border-top:1px solid var(--border);">
-                        <!-- JORDAN -->
                         <div class="bar-wrap">
-                            <div class="bar-head"><span>Jordan (Card Usage)</span> <span style="color:var(--danger)">&lt;20%</span></div>
-                            <div class="bar-bg"><div class="bar-fill fill-red" style="width: 20%"></div></div>
-                            <a href="https://www.zawya.com/en/economy/levant/jordan-36bln-in-money-transfers-via-cliq-in-first-2-months-of-2025-k0fw2bgf" target="_blank" class="source-btn">Data: Zawya</a>
+                            <div class="bar-head"><span>Jordan (Card Usage)</span> <span style="color:var(--c-problem)">&lt;20%</span></div>
+                            <div class="bar-bg"><div class="bar-fill" style="width: 20%; background:var(--c-problem);"></div></div>
+                            <a href="#" class="source-btn">Data: Zawya</a>
                         </div>
-                        <!-- EGYPT -->
                         <div class="bar-wrap">
-                            <div class="bar-head"><span>Egypt (Card Usage)</s
+                            <div class="bar-head"><span>Egypt (Card Usage)</span> <span style="color:#f97316">~25%</span></div>
+                            <div class="bar-bg"><div class="bar-fill" style="width: 25%; background:#f97316;"></div></div>
+                            <a href="#" class="source-btn">Data: Noda.live</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Solution -->
+            <section>
+                <h2><div class="icon-box solution-color"><svg><use href="#icon-bulb"></use></svg></div> Our Solution</h2>
+                <div class="card js-tilt" style="border-left: 3px solid var(--c-solution);">
+                    <p style="color:#fff; font-weight:500;">MASA is a universal identity layer that replaces screenshots with an intelligent <strong>AI Verification Agent</strong>.</p>
+                    <div style="background:#000; padding:15px; border-radius:12px; text-align:center; margin:20px 0; border:1px solid rgba(255,255,255,0.1);">
+                        <div style="font-size:0.7rem; color:var(--text-muted); letter-spacing:1px; margin-bottom:5px;">YOUR IDENTITY BECOMES</div>
+                        <div style="font-size:1.4rem; font-weight:700; color:#fff;">THE ORDER ID</div>
+                    </div>
+                    <div class="bento-grid">
+                        <div class="bento-item"><span class="bento-icon">🚫</span><div class="bento-title" style="color:var(--c-solution)">No Manual Work</div></div>
+                        <div class="bento-item"><span class="bento-icon">🤖</span><div class="bento-title" style="color:var(--c-whynow)">AI-Native</div></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Why Now -->
+            <section class="whynow-section">
+                <h2><div class="icon-box whynow-color"><svg><use href="#icon-clock"></use></svg></div> Why Now</h2>
+                <div class="card js-tilt" style="border-left: 3px solid var(--c-whynow);">
+                    <ul class="bullet-list">
+                        <li><strong>Real-Time Boom:</strong><br>CliQ (Jordan) and InstaPay (Egypt) volume has exploded, but P2M tools are missing.</li>
+                        <li><strong>AI Has Matured:</strong><br>LLMs can now parse unstructured notification text instantly and cheaply.</li>
+                        <li><strong>Disruption Window:</strong><br>Merchants are actively rejecting Cash (COD) to save costs.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Market Size -->
+            <section>
+                <h2><div class="icon-box solution-color"><svg><use href="#icon-chart"></use></svg></div> Market Size</h2>
+                <div style="display:flex; flex-direction:column; gap:10px;">
+                    <div style="padding:20px; border:1px solid var(--border); border-radius:16px; text-align:center; background:rgba(255,255,255,0.02);">
+                        <div style="font-size:2.2rem; font-weight:800; line-height:1; margin-bottom:5px;">$57B+</div>
+                        <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">TAM: MENA E-Commerce (2026)</div>
+                    </div>
+                    <div style="padding:20px; border:1px solid rgba(59,130,246,0.3); border-radius:16px; text-align:center; background:rgba(59,130,246,0.1);">
+                        <div style="font-size:2.2rem; font-weight:800; color:#60a5fa; line-height:1; margin-bottom:5px;">$15B</div>
+                        <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">SAM: Cash/Non-Card Volume</div>
+                    </div>
+                    <div style="padding:20px; border:1px solid var(--c-solution); border-radius:16px; text-align:center; background:rgba(34,197,94,0.1);">
+                        <div style="font-size:2.2rem; font-weight:800; color:var(--c-solution); line-height:1; margin-bottom:5px;">$250M</div>
+                        <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">SOM: Jordan GMV</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Business Model -->
+            <section>
+                <h2><div class="icon-box solution-color"><svg><use href="#icon-money"></use></svg></div> Business Model</h2>
+                <div class="bento-grid">
+                    <div class="card js-tilt" style="margin:0; padding:20px;">
+                        <div style="font-size:0.7rem; font-weight:700; color:var(--c-solution); text-transform:uppercase; margin-bottom:8px;">Transaction</div>
+                        <div style="font-size:2rem; font-weight:800;">1.5%</div>
+                        <p style="font-size:0.8rem; margin:0;">Per verification.</p>
+                    </div>
+                    <div class="card js-tilt" style="margin:0; padding:20px;">
+                        <div style="font-size:0.7rem; font-weight:700; color:var(--c-product); text-transform:uppercase; margin-bottom:8px;">SaaS Pro</div>
+                        <div style="font-size:2rem; font-weight:800;">$19<span style="font-size:1rem; font-weight:400;">/mo</span></div>
+                        <p style="font-size:0.8rem; margin:0;">Analytics & Agents.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Roadmap -->
+            <section>
+                <h2><div class="icon-box product-color"><svg><use href="#icon-map"></use></svg></div> Roadmap</h2>
+                <div class="card">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-dot" style="background:var(--c-solution); border-color:var(--c-solution);"></div>
+                            <div class="tag" style="background:rgba(34,197,94,0.2); color:var(--c-solution);">NOW</div>
+                            <h4 style="font-size:1rem; margin-bottom:4px;">MVP Public Launch</h4>
+                            <p style="font-size:0.85rem; margin:0;">Core AI parsing logic functional.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot" style="border-color:var(--c-whynow);"></div>
+                            <div class="tag" style="background:rgba(59,130,246,0.2); color:var(--c-whynow);">Q3 2026</div>
+                            <h4 style="font-size:1rem; margin-bottom:4px;">Merchant Pilot</h4>
+                            <p style="font-size:0.85rem; margin:0;">Onboard 50 merchants in Jordan.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-dot" style="border-color:var(--c-product);"></div>
+                            <div class="tag" style="background:rgba(168,85,247,0.2); color:var(--c-product);">2027</div>
+                            <h4 style="font-size:1rem; margin-bottom:4px;">Regional Expansion</h4>
+                            <p style="font-size:0.85rem; margin:0;">Egypt (InstaPay) & Iraq.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Ask -->
+            <section>
+                <h2><div class="icon-box solution-color"><svg><use href="#icon-money"></use></svg></div> The Ask</h2>
+                <div class="card js-tilt" style="text-align:center; border:1px solid var(--c-solution);">
+                    <div style="font-size:0.75rem; font-weight:700; color:var(--c-solution); text-transform:uppercase; margin-bottom:10px;">PRE-SEED ROUND</div>
+                    <div style="font-size:3.5rem; font-weight:800; line-height:1; margin-bottom:20px;">25K <span style="font-size:1.5rem; color:var(--text-muted);">JOD</span></div>
+                    <a href="mailto:founder@masa.pay" style="display:block; margin-top:20px; background:#fff; color:#000; text-decoration:none; padding:12px; border-radius:100px; font-weight:700;">Contact Founder</a>
+                </div>
+            </section>
+            
+            <div style="text-align:center; font-size:0.8rem; color:#444; margin-top:50px;">&copy; 2026 MASA Pay</div>
+
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // 1. NEURAL NETWORK ANIMATION
+        const canvas = document.getElementById('login-bg');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if(this.x < 0 || this.x > width) this.vx *= -1;
+                if(this.y < 0 || this.y > height) this.vy *= -1;
+            }
+        }
+
+        for(let i=0; i<60; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.clearRect(0,0,width,height);
+            ctx.fillStyle = 'rgba(59, 130, 246, 0.5)';
+            ctx.strokeStyle = 'rgba(59, 130, 246, 0.1)';
+            
+            particles.forEach((p, i) => {
+                p.update();
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 2, 0, Math.PI*2);
+                ctx.fill();
+                
+                for(let j=i+1; j<particles.length; j++) {
+                    const p2 = particles[j];
+                    const dist = Math.hypot(p.x-p2.x, p.y-p2.y);
+                    if(dist < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // 2. LOGIN LOGIC
+        function login() {
+            const u = document.getElementById('user').value;
+            const p = document.getElementById('pass').value;
+            const screen = document.getElementById('login-screen');
+            const app = document.getElementById('app');
+            const err = document.getElementById('err');
+
+            if(u === 'demo' && p === 'cliq2026') {
+                screen.style.opacity = '0';
+                
+                // Wait for fade out
+                setTimeout(() => {
+                    screen.style.display = 'none';
+                    app.style.display = 'block';
+                    
+                    // Fade in app
+                    setTimeout(() => {
+                        app.style.opacity = '1';
+                        // Trigger Data Bars
+                        document.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.style.width);
+                    }, 50);
+                }, 800);
+            } else {
+                err.innerText = 'Invalid Credentials';
+            }
+        }
+        document.getElementById('pass').addEventListener('keyup', e => { if(e.key === 'Enter') login() });
+
+        // 3. 3D TILT
+        document.querySelectorAll('.js-tilt').forEach(c => {
+            c.addEventListener('mousemove', (e) => {
+                const r = c.getBoundingClientRect();
+                const x = e.clientX - r.left;
+                const y = e.clientY - r.top;
+                const rx = ((y - r.height/2) / r.height) * -4;
+                const ry = ((x - r.width/2) / r.width) * 4;
+                c.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)`;
+            });
+            c.addEventListener('mouseleave', () => {
+                c.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1,1,1)`;
+            });
+        });
+    </script>
+</body>
+</html>
