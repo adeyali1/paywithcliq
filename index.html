@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <title>MASA Pay — AI Verification Infrastructure</title>
+    <title>MASA Pay — Investor Deck</title>
     
-    <!-- Fonts from NMBR Source -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Inter:wght@100..900&display=swap" rel="stylesheet">
 
     <style>
-        /* --- NMBR DESIGN SYSTEM --- */
+        /* --- DESIGN SYSTEM (NMBR DNA) --- */
         :root {
-            --bg: #09090b; /* NMBR Dark Base */
+            --bg: #09090b;
             --card-bg: rgba(24, 24, 27, 0.6);
             --border: rgba(255, 255, 255, 0.08);
             
-            /* Section Colors */
+            /* Theme Colors */
             --c-problem: #ef4444; 
             --c-solution: #22c55e;
-            --c-product: #8b5cf6; /* Matches theme-color from source */
+            --c-product: #8b5cf6; 
             --c-whynow: #3b82f6; 
             --c-comp: #f97316;   
             --c-moat: #eab308;   
@@ -41,7 +41,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- SPLASH SCREEN (From Source) --- */
+        /* --- SPLASH SCREEN --- */
         #splash-screen {
             position: fixed; inset: 0; z-index: 99999; 
             display: flex; align-items: center; justify-content: center; 
@@ -56,17 +56,14 @@
         }
         @keyframes splash-spin { to { transform: rotate(360deg); } }
 
-        /* --- POST-LOGIN AMBIENT BACKGROUND --- */
-        .ambient-bg {
-            position: fixed; inset: 0; pointer-events: none; z-index: -1; overflow: hidden;
-        }
+        /* --- AMBIENT BACKGROUND --- */
+        .ambient-bg { position: fixed; inset: 0; pointer-events: none; z-index: -1; overflow: hidden; }
         .orb {
-            position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.2;
+            position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.15;
             animation: float 15s ease-in-out infinite alternate;
         }
         .orb-1 { top: -10%; left: -10%; width: 600px; height: 600px; background: var(--c-whynow); }
         .orb-2 { bottom: -10%; right: -10%; width: 500px; height: 500px; background: var(--c-product); animation-delay: -5s; }
-        
         @keyframes float { 0% { transform: translate(0,0); } 100% { transform: translate(40px, 60px); } }
 
         /* --- LAYOUT --- */
@@ -75,17 +72,15 @@
 
         /* --- TYPOGRAPHY --- */
         h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; color: #fff; line-height: 1.1; }
-        
         h1 {
             font-size: 2.8rem; letter-spacing: -0.04em; margin-bottom: 24px;
             background: linear-gradient(180deg, #fff 0%, #a1a1aa 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-
         h2 { font-size: 1.4rem; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; font-weight: 700; }
         p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; line-height: 1.6; }
 
-        /* --- CARD SYSTEM --- */
+        /* --- CARDS --- */
         .card {
             background: var(--card-bg);
             border: 1px solid var(--border);
@@ -103,18 +98,17 @@
             box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5); 
         }
 
-        /* --- SCROLL REVEAL ANIMATION --- */
+        /* --- SCROLL REVEAL --- */
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* --- ICONS --- */
+        /* --- ICONS & COLORS --- */
         .icon-box {
             width: 32px; height: 32px; border-radius: 8px;
             display: flex; align-items: center; justify-content: center;
         }
         .icon-box svg { width: 20px; height: 20px; fill: currentColor; }
         
-        /* Section Specifics */
         .problem-color { color: var(--c-problem); background: rgba(239, 68, 68, 0.15); }
         .solution-color { color: var(--c-solution); background: rgba(34, 197, 94, 0.15); }
         .product-color { color: var(--c-product); background: rgba(139, 92, 246, 0.15); }
@@ -123,33 +117,27 @@
         .moat-color { color: var(--c-moat); background: rgba(234, 179, 8, 0.15); }
         .traction-color { color: var(--c-traction); background: rgba(236, 72, 153, 0.15); }
 
-        /* --- LISTS --- */
+        /* --- LISTS & GRIDS --- */
         .bullet-list { list-style: none; }
-        .bullet-list li { 
-            position: relative; padding-left: 26px; margin-bottom: 18px; 
-            color: #e4e4e7; font-size: 0.9rem; transition: transform 0.2s;
-        }
+        .bullet-list li { position: relative; padding-left: 26px; margin-bottom: 18px; color: #e4e4e7; font-size: 0.9rem; transition: transform 0.2s; }
         .bullet-list li:hover { transform: translateX(5px); color: #fff; }
-        .bullet-list li::before { 
-            content: "•"; position: absolute; left: 6px; top: -2px; 
-            font-size: 1.4em; font-weight: bold; 
-        }
+        .bullet-list li::before { content: "•"; position: absolute; left: 6px; top: -2px; font-size: 1.4em; font-weight: bold; }
+        
         .problem-section .bullet-list li::before { color: var(--c-problem); }
         .whynow-section .bullet-list li::before { color: var(--c-whynow); }
         .moat-section .bullet-list li::before { color: var(--c-moat); }
 
-        /* --- BENTO GRID --- */
         .bento-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .bento-item { 
             background: rgba(255,255,255,0.03); padding: 16px; border-radius: 16px; 
-            text-align: center; border: 1px solid rgba(255,255,255,0.05); 
-            transition: 0.3s;
+            text-align: center; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
         }
         .bento-item:hover { background: rgba(255,255,255,0.08); transform: scale(1.05); border-color: rgba(255,255,255,0.2); }
         .bento-icon { font-size: 1.5rem; margin-bottom: 8px; display: block; }
         .bento-title { font-weight: 700; font-size: 0.85rem; color: #fff; margin-bottom: 4px; }
+        .bento-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.3; }
 
-        /* --- SIMULATION (The "Product" Visual) --- */
+        /* --- PRODUCT SIMULATION --- */
         .sim-phone {
             background: #000; border-radius: 16px; padding: 15px; 
             border: 1px solid #333; margin-bottom: 20px;
@@ -176,41 +164,44 @@
         .timeline-dot { position: absolute; left: 0; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 2px solid; z-index: 2; }
         .tag { display: inline-block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; margin-bottom: 6px; }
 
-        /* --- LOGIN SCREEN --- */
+        /* --- DATA BARS --- */
+        .bar-wrap { margin-bottom: 16px; }
+        .bar-head { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px; font-weight: 600; text-transform: uppercase; }
+        .bar-bg { background: rgba(255,255,255,0.08); height: 6px; border-radius: 10px; overflow: hidden; }
+        .bar-fill { height: 100%; border-radius: 10px; width: 0; transition: width 1s ease; }
+        .source-btn { display: inline-flex; align-items: center; gap: 4px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; border: 1px solid rgba(255,255,255,0.08); padding: 4px 10px; border-radius: 100px; text-decoration: none; margin-top: 6px; transition: 0.2s; background: rgba(0,0,0,0.3); }
+        .source-btn:hover { border-color: var(--c-whynow); color: #fff; }
+
+        /* --- LOGIN --- */
         #login-screen {
             position: fixed; inset: 0; background: #09090b; z-index: 9999;
             display: flex; align-items: center; justify-content: center; flex-direction: column;
-            transition: opacity 0.8s ease;
         }
         #login-bg-canvas { position: absolute; inset: 0; z-index: -1; }
-        
         .login-card {
             background: rgba(20, 20, 25, 0.7); backdrop-filter: blur(20px);
             border: 1px solid rgba(255,255,255,0.1); padding: 40px; border-radius: 24px;
             width: 320px; text-align: center; box-shadow: 0 0 80px rgba(0,0,0,0.8);
             transform: translateY(20px); opacity: 0; animation: fadeUp 0.8s forwards 0.5s;
         }
-        
         .login-input {
             width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
             color: #fff; padding: 14px; margin-bottom: 12px; border-radius: 12px;
             text-align: center; font-size: 16px; transition: 0.3s;
         }
         .login-input:focus { border-color: var(--c-product); background: rgba(139, 92, 246, 0.1); }
-        
         .login-btn {
             width: 100%; background: #fff; color: #000; font-weight: 700; padding: 14px;
             border-radius: 12px; border: none; cursor: pointer; transition: 0.3s; font-size: 16px;
         }
         .login-btn:hover { transform: scale(1.02); background: #f4f4f5; }
-
         @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
     </style>
 </head>
 <body>
 
-    <!-- SVG SYMBOLS -->
+    <!-- SVG DEFS -->
     <svg style="display:none;">
         <symbol id="icon-bulb" viewBox="0 0 24 24"><path d="M9 21h6v-2H9v2zm3-19C8.1 2 5 5.1 5 9c0 2.4 1.2 4.5 3 5.7V17c0 .5.4 1 1 1h6c.6 0 1-.5 1-1v-2.3c1.8-1.3 3-3.4 3-5.7 0-3.9-3.1-7-7-7z"/></symbol>
         <symbol id="icon-warning" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm1 14h-2v2h2v-2zm0-6h-2v4h2v-4z"/></symbol>
@@ -225,7 +216,7 @@
         <symbol id="icon-group" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></symbol>
     </svg>
 
-    <!-- 1. SPLASH SCREEN (From your Source) -->
+    <!-- 1. SPLASH -->
     <div id="splash-screen">
         <div style="display:flex; flex-direction:column; align-items:center; gap:16px;">
             <div style="width:60px; height:60px; background:linear-gradient(135deg, #8b5cf6, #1e40af); border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:800; color:#fff; font-size:24px;">M</div>
@@ -233,7 +224,7 @@
         </div>
     </div>
 
-    <!-- 2. LOGIN SCREEN -->
+    <!-- 2. LOGIN -->
     <div id="login-screen" style="display:none;">
         <canvas id="login-bg-canvas"></canvas>
         <div class="login-card">
@@ -242,17 +233,15 @@
             </div>
             <h2 style="justify-content:center; color:#fff;">MASA PAY</h2>
             <p style="font-size:12px; margin-bottom:20px; color:#aaa;">Investor Access Portal</p>
-            
             <input type="text" id="user" class="login-input" placeholder="Username (demo)">
             <input type="password" id="pass" class="login-input" placeholder="Password (cliq2026)">
-            <button onclick="login()" class="login-btn">View Pitch</button>
-            <div id="err" style="color:#ef4444; font-size:12px; margin-top:10px;"></div>
+            <button onclick="login()" class="login-btn">Unlock Pitch</button>
+            <div id="err" style="color:#ef4444; font-size:12px; margin-top:10px; height:20px;"></div>
         </div>
     </div>
 
     <!-- 3. MAIN DECK -->
     <div id="app">
-        <!-- Post-Login Animated Background -->
         <div class="ambient-bg">
             <div class="orb orb-1"></div>
             <div class="orb orb-2"></div>
@@ -260,20 +249,20 @@
 
         <div class="container">
             
-            <!-- Header -->
+            <!-- HEADER -->
             <div class="reveal" style="display:flex; align-items:center; gap:12px; margin-bottom:40px;">
                 <div style="width:32px; height:32px; background:linear-gradient(135deg, var(--c-whynow), #1e40af); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px;">M</div>
                 <div style="font-family:'Space Grotesk'; font-weight:700; font-size:1.1rem;">MASA Pay</div>
             </div>
 
-            <!-- Hero -->
+            <!-- HERO -->
             <section class="reveal">
                 <div style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.1); border-radius:50px; font-size:0.75rem; font-weight:700; margin-bottom:20px;">IDEA STAGE</div>
                 <h1>Accept Mobile Wallets Online. Instantly.</h1>
-                <p>AI infrastructure turning manual transfers into automated checkout.</p>
+                <p>AI infrastructure turning manual transfers (CliQ, InstaPay, ZainCash) into automated checkout.</p>
             </section>
 
-            <!-- Problem -->
+            <!-- PROBLEM -->
             <section class="problem-section reveal">
                 <h2><div class="icon-box problem-color"><svg><use href="#icon-warning"></use></svg></div> The Problem</h2>
                 <div class="card js-tilt" style="border-left: 3px solid var(--c-problem);">
@@ -282,10 +271,22 @@
                         <li><strong>Manual Wallets</strong><br>Merchants force users to take "screenshots" of transfers.</li>
                         <li><strong>COD Risks</strong><br>Cash orders have high return rates and delayed settlement.</li>
                     </ul>
+                    <div style="margin-top:25px; padding-top:20px; border-top:1px solid var(--border);">
+                        <div class="bar-wrap">
+                            <div class="bar-head"><span>Jordan (Card Usage)</span> <span style="color:var(--c-problem)">&lt;20%</span></div>
+                            <div class="bar-bg"><div class="bar-fill" style="width: 20%; background:var(--c-problem);"></div></div>
+                            <a href="#" class="source-btn">Data: Zawya</a>
+                        </div>
+                        <div class="bar-wrap">
+                            <div class="bar-head"><span>Egypt (Card Usage)</span> <span style="color:#f97316">~25%</span></div>
+                            <div class="bar-bg"><div class="bar-fill" style="width: 25%; background:#f97316;"></div></div>
+                            <a href="#" class="source-btn">Data: Noda.live</a>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <!-- Solution -->
+            <!-- SOLUTION -->
             <section class="reveal">
                 <h2><div class="icon-box solution-color"><svg><use href="#icon-bulb"></use></svg></div> Our Solution</h2>
                 <div class="card js-tilt" style="border-left: 3px solid var(--c-solution);">
@@ -301,13 +302,11 @@
                 </div>
             </section>
 
-            <!-- Product (Added Visual Simulation) -->
+            <!-- PRODUCT (Sim) -->
             <section class="reveal">
                 <h2><div class="icon-box product-color"><svg><use href="#icon-product"></use></svg></div> Product</h2>
                 <div class="card js-tilt" style="border-left: 3px solid var(--c-product);">
-                    <p style="font-size:0.9rem; margin-bottom:15px;">How the AI works in real-time:</p>
-                    
-                    <!-- Sim -->
+                    <p style="font-size:0.9rem; margin-bottom:15px;">Real-time AI Verification Logic:</p>
                     <div class="sim-phone">
                         <div class="sim-msg">
                             <strong>Bank SMS:</strong> Received 25.00 JOD from Ahmad (Ref: 99283)
@@ -318,7 +317,6 @@
                             <div style="font-size:0.7rem; color:var(--c-solution);">Confidence: 99.9%</div>
                         </div>
                     </div>
-                    
                     <div class="bento-grid">
                         <div class="bento-item">
                             <h4 style="color:#fff; font-size:0.8rem;">Parsing Engine</h4>
@@ -332,7 +330,19 @@
                 </div>
             </section>
 
-            <!-- Market Size -->
+            <!-- WHY NOW -->
+            <section class="whynow-section reveal">
+                <h2><div class="icon-box whynow-color"><svg><use href="#icon-clock"></use></svg></div> Why Now</h2>
+                <div class="card js-tilt" style="border-left: 3px solid var(--c-whynow);">
+                    <ul class="bullet-list">
+                        <li><strong>Real-Time Boom:</strong><br>CliQ (Jordan) and InstaPay (Egypt) volume has exploded, but P2M tools are missing.</li>
+                        <li><strong>AI Maturity:</strong><br>LLMs can now parse unstructured notification text instantly and cheaply.</li>
+                        <li><strong>Post-Cash Era:</strong><br>Merchants are actively rejecting Cash (COD) to save costs.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- MARKET SIZE -->
             <section class="reveal">
                 <h2><div class="icon-box solution-color"><svg><use href="#icon-chart"></use></svg></div> Market Size</h2>
                 <div style="display:flex; flex-direction:column; gap:10px;">
@@ -351,7 +361,7 @@
                 </div>
             </section>
 
-            <!-- Business Model -->
+            <!-- BUSINESS MODEL -->
             <section class="reveal">
                 <h2><div class="icon-box solution-color"><svg><use href="#icon-money"></use></svg></div> Business Model</h2>
                 <div class="bento-grid">
@@ -366,7 +376,38 @@
                 </div>
             </section>
 
-            <!-- Roadmap -->
+            <!-- COMPETITION -->
+            <section class="reveal">
+                <h2><div class="icon-box comp-color"><svg><use href="#icon-target"></use></svg></div> Competition</h2>
+                <div class="card">
+                    <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:10px; border-bottom:1px solid var(--border); padding-bottom:10px; margin-bottom:10px; font-size:0.7rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">
+                        <div>Method</div><div style="text-align:center;">Instant</div><div style="text-align:center;">No Card</div>
+                    </div>
+                    <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:10px; margin-bottom:15px; align-items:center; font-size:0.9rem;">
+                        <div>Manual CliQ</div><div style="text-align:center; color:var(--c-problem);">✕</div><div style="text-align:center; color:var(--c-solution);">✓</div>
+                    </div>
+                    <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:10px; margin-bottom:15px; align-items:center; font-size:0.9rem;">
+                        <div>Stripe</div><div style="text-align:center; color:var(--c-solution);">✓</div><div style="text-align:center; color:var(--c-problem);">✕</div>
+                    </div>
+                    <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:10px; align-items:center; background:rgba(59,130,246,0.1); padding:10px; border-radius:8px; font-size:0.9rem;">
+                        <div style="font-weight:700; color:#fff;">MASA Pay</div><div style="text-align:center; color:var(--c-solution);">✓</div><div style="text-align:center; color:var(--c-solution);">✓</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- COMPETITIVE ADVANTAGE -->
+            <section class="moat-section reveal">
+                <h2><div class="icon-box moat-color"><svg><use href="#icon-shield"></use></svg></div> Advantage</h2>
+                <div class="card js-tilt" style="border-left: 3px solid var(--c-moat);">
+                    <ul class="bullet-list">
+                        <li><strong>AI-Native:</strong><br>Built to parse unstructured notifications, not waiting for bank APIs.</li>
+                        <li><strong>Universal Layer:</strong><br>We scale to any wallet (Zain, Orange) instantly.</li>
+                        <li><strong>Data Moat:</strong><br>Proprietary dataset of transaction patterns improves fraud detection.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- ROADMAP -->
             <section class="reveal">
                 <h2><div class="icon-box product-color"><svg><use href="#icon-map"></use></svg></div> Roadmap</h2>
                 <div class="card">
@@ -390,7 +431,36 @@
                 </div>
             </section>
 
-            <!-- Ask -->
+            <!-- TRACTION -->
+            <section class="reveal">
+                <h2><div class="icon-box traction-color"><svg><use href="#icon-rocket"></use></svg></div> Traction</h2>
+                <div class="bento-grid">
+                    <div class="card" style="margin:0; text-align:center; padding:15px;">
+                        <div style="font-size:1.5rem; font-weight:800; color:#fff;">MVP</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">Logic Validated</div>
+                    </div>
+                    <div class="card" style="margin:0; text-align:center; padding:15px;">
+                        <div style="font-size:1.5rem; font-weight:800; color:#fff;">100%</div>
+                        <div style="font-size:0.8rem; color:var(--text-muted);">Bootstrapped</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TEAM -->
+            <section class="reveal">
+                <h2><div class="icon-box whynow-color"><svg><use href="#icon-group"></use></svg></div> Team</h2>
+                <div class="card" style="display:flex; align-items:center; gap:15px;">
+                    <div style="width:50px; height:50px; background:#222; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#555; border:1px solid #333;">
+                        <svg width="24" height="24" fill="#666"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    </div>
+                    <div>
+                        <h4 style="margin-bottom:2px;">Founder & CEO</h4>
+                        <p style="margin:0; font-size:0.8rem;">Building the future of digital verification.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ASK -->
             <section class="reveal">
                 <h2><div class="icon-box solution-color"><svg><use href="#icon-money"></use></svg></div> The Ask</h2>
                 <div class="card js-tilt" style="text-align:center; border:1px solid var(--c-solution);">
@@ -401,26 +471,26 @@
             </section>
             
             <div style="text-align:center; font-size:0.7rem; color:#444; margin-top:50px;">&copy; 2026 MASA Pay</div>
+
         </div>
     </div>
 
     <!-- SCRIPTS -->
     <script>
-        // 1. SPLASH SCREEN LOGIC
+        // 1. SPLASH SCREEN
         window.onload = function() {
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 splash.style.opacity = '0';
                 setTimeout(() => {
                     splash.style.display = 'none';
-                    // Show Login
                     document.getElementById('login-screen').style.display = 'flex';
-                    startParticles(); // Start bg animation
+                    startParticles();
                 }, 500);
-            }, 1500); // 1.5s splash
+            }, 1500);
         };
 
-        // 2. PARTICLE BACKGROUND (Canvas)
+        // 2. PARTICLES
         function startParticles() {
             const canvas = document.getElementById('login-bg-canvas');
             const ctx = canvas.getContext('2d');
@@ -431,10 +501,7 @@
             resize();
 
             for(let i=0; i<50; i++) {
-                particles.push({
-                    x: Math.random()*w, y: Math.random()*h,
-                    vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5
-                });
+                particles.push({ x: Math.random()*w, y: Math.random()*h, vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5 });
             }
 
             function anim() {
@@ -455,7 +522,7 @@
             anim();
         }
 
-        // 3. LOGIN & APP REVEAL
+        // 3. LOGIN & REVEAL
         function login() {
             const u = document.getElementById('user').value;
             const p = document.getElementById('pass').value;
@@ -469,7 +536,8 @@
                     scr.style.display = 'none';
                     app.style.display = 'block';
                     setTimeout(() => app.style.opacity = '1', 50);
-                    initObservers(); // Start scroll reveal
+                    initObservers();
+                    setTimeout(() => { document.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.style.width); }, 200);
                 }, 800);
             } else {
                 err.innerText = 'Invalid Credentials';
@@ -477,29 +545,22 @@
         }
         document.getElementById('pass').addEventListener('keyup', e => { if(e.key === 'Enter') login() });
 
-        // 4. SCROLL OBSERVER & 3D TILT
+        // 4. OBSERVER & TILT
         function initObservers() {
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if(entry.isIntersecting) entry.target.classList.add('active');
-                });
+                entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('active'); });
             }, { threshold: 0.1 });
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
-        // 3D Tilt Logic
         document.querySelectorAll('.js-tilt').forEach(c => {
             c.addEventListener('mousemove', (e) => {
                 const r = c.getBoundingClientRect();
-                const x = e.clientX - r.left;
-                const y = e.clientY - r.top;
-                const rx = ((y - r.height/2) / r.height) * -5;
-                const ry = ((x - r.width/2) / r.width) * 5;
+                const x = e.clientX - r.left; const y = e.clientY - r.top;
+                const rx = ((y - r.height/2) / r.height) * -5; const ry = ((x - r.width/2) / r.width) * 5;
                 c.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)`;
             });
-            c.addEventListener('mouseleave', () => {
-                c.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1,1,1)`;
-            });
+            c.addEventListener('mouseleave', () => { c.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1,1,1)`; });
         });
     </script>
 </body>
