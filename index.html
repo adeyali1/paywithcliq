@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <title>MASA Pay — Investor Deck</title>
+    <title>MASA Pay — Automated Wallet Payments for Merchants</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -121,7 +121,7 @@
         .bullet-list li:hover { transform: translateX(5px); color: #fff; }
         .bullet-list li::before { content: "•"; position: absolute; left: 6px; top: -2px; font-size: 1.4em; font-weight: bold; }
         .problem-section .bullet-list li::before { color: var(--c-problem); }
-        .whynow-section .bullet-list li::before { color: var(--c-whynow); }
+        .whynow-section .bullet-list li::before { color: var(--c-solution); }
         .moat-section .bullet-list li::before { color: var(--c-moat); }
 
         /* --- BENTO --- */
@@ -155,61 +155,39 @@
         }
         @keyframes pulse-border { 0% { border-color: rgba(139,92,246,0.3); } 50% { border-color: rgba(139,92,246,0.8); } 100% { border-color: rgba(139,92,246,0.3); } }
 
-        /* --- TIMELINE --- */
-        .timeline { position: relative; padding-left: 20px; margin-top: 10px; }
-        .timeline::before { content: ''; position: absolute; left: 6px; top: 10px; bottom: 20px; width: 2px; background: rgba(255,255,255,0.1); }
-        .timeline-item { position: relative; padding-left: 24px; margin-bottom: 32px; }
-        .timeline-dot { position: absolute; left: 0; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 2px solid; z-index: 2; }
-        .tag { display: inline-block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; margin-bottom: 6px; }
-
-        /* --- DATA BARS --- */
-        .bar-wrap { margin-bottom: 16px; position: relative; }
-        .bar-head { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 6px; font-weight: 600; text-transform: uppercase; }
-        .bar-bg { background: rgba(255,255,255,0.08); height: 6px; border-radius: 10px; overflow: hidden; }
-        .bar-fill { height: 100%; border-radius: 10px; width: 0; transition: width 1.5s ease; }
-        .source-btn { 
-            position: relative; z-index: 10; cursor: pointer; pointer-events: auto;
-            display: inline-flex; align-items: center; gap: 4px; 
-            font-size: 9px; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; 
-            border: 1px solid rgba(255,255,255,0.08); padding: 4px 10px; border-radius: 100px; 
-            text-decoration: none; margin-top: 6px; transition: 0.2s; background: rgba(0,0,0,0.3); 
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--c-product), #1e40af);
+            color: #fff;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 0.95rem;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px -5px rgba(139, 92, 246, 0.4);
         }
-        .source-btn:hover { border-color: var(--c-whynow); color: #fff; background: rgba(59,130,246,0.15); }
-
-        /* --- PATENT SECTION STYLE --- */
-        .patent-card {
-            background: linear-gradient(135deg, #2e1065 0%, #000000 100%);
-            border: 1px solid rgba(139, 92, 246, 0.4);
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 25px -5px rgba(139, 92, 246, 0.6);
         }
-        .uspto-badge {
-            width: 50px; height: 50px; background: #fff; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; margin-bottom: 15px;
+        .btn-outline {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: none;
         }
-
-        /* --- LOGIN --- */
-        #login-screen {
-            position: fixed; inset: 0; background: #09090b; z-index: 9999;
-            display: flex; align-items: center; justify-content: center; flex-direction: column;
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.5);
+            box-shadow: none;
         }
-        #login-bg-canvas { position: absolute; inset: 0; z-index: -1; }
-        .login-card {
-            background: rgba(20, 20, 25, 0.7); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1); padding: 40px; border-radius: 24px;
-            width: 320px; text-align: center; box-shadow: 0 0 80px rgba(0,0,0,0.8);
-            transform: translateY(20px); opacity: 0; animation: fadeUp 0.8s forwards 0.5s;
+        .hero-actions {
+            display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap;
         }
-        .login-input {
-            width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            color: #fff; padding: 14px; margin-bottom: 12px; border-radius: 12px;
-            text-align: center; font-size: 16px; transition: 0.3s;
-        }
-        .login-input:focus { border-color: var(--c-product); background: rgba(139, 92, 246, 0.1); }
-        .login-btn {
-            width: 100%; background: #fff; color: #000; font-weight: 700; padding: 14px;
-            border-radius: 12px; border: none; cursor: pointer; transition: 0.3s; font-size: 16px;
-        }
-        .login-btn:hover { transform: scale(1.02); background: #f4f4f5; }
-        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
     </style>
 </head>
@@ -225,11 +203,6 @@
         <symbol id="icon-money" viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></symbol>
         <symbol id="icon-target" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5.5-8c0-3.03 2.47-5.5 5.5-5.5s5.5 2.47 5.5 5.5-2.47 5.5-5.5 5.5-5.5-2.47-5.5-5.5z"/></symbol>
         <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></symbol>
-        <symbol id="icon-map" viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></symbol>
-        <symbol id="icon-rocket" viewBox="0 0 24 24"><path d="M9 19h6v2H9zM20 6c0-3.31-2.69-6-6-6s-6 2.69-6 6c0 2.12 1.09 3.98 2.72 5.12L8 20h8l-2.72-8.88C18.91 9.98 20 8.12 20 6z"/></symbol>
-        <symbol id="icon-group" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></symbol>
-        <!-- Patent Icon -->
-        <symbol id="icon-uspto" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14h-2v-4H8v-2h2V9h2v2h2v2h-2v4z"/></symbol>
     </svg>
 
     <!-- 1. SPLASH -->
@@ -240,23 +213,7 @@
         </div>
     </div>
 
-    <!-- 2. LOGIN -->
-    <div id="login-screen" style="display:none;">
-        <canvas id="login-bg-canvas"></canvas>
-        <div class="login-card">
-            <div style="display:flex; justify-content:center; margin-bottom:15px;">
-                <div style="width:50px; height:50px; background:linear-gradient(135deg, var(--c-product), #1e40af); border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:24px; color:#fff;">M</div>
-            </div>
-            <h2 style="justify-content:center; color:#fff;">MASA PAY</h2>
-            <p style="font-size:12px; margin-bottom:20px; color:#aaa;">Investor Access Portal</p>
-            <input type="text" id="user" class="login-input" placeholder="Username (MASA)">
-            <input type="password" id="pass" class="login-input" placeholder="Password (Masa2026)">
-            <button onclick="login()" class="login-btn">Unlock Pitch</button>
-            <div id="err" style="color:#ef4444; font-size:12px; margin-top:10px; height:20px;"></div>
-        </div>
-    </div>
-
-    <!-- 3. MAIN DECK -->
+    <!-- 2. MAIN APP LANDING PAGE -->
     <div id="app">
         <div class="ambient-bg">
             <div class="orb orb-1"></div>
@@ -273,278 +230,147 @@
 
             <!-- HERO -->
             <section class="reveal">
-                <div style="display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.1); border-radius:50px; font-size:0.75rem; font-weight:700; margin-bottom:20px;">IDEA STAGE</div>
-                <h1>Accept Mobile Wallets Online. Instantly.</h1>
-                <p>AI infrastructure turning manual transfers (CliQ, InstaPay, ZainCash) into automated checkout.</p>
+                <div style="display:inline-block; padding:4px 12px; background:rgba(139, 92, 246, 0.15); color: #d8b4fe; border-radius:50px; font-size:0.75rem; font-weight:700; margin-bottom:20px; border: 1px solid rgba(139, 92, 246, 0.3);">
+                    MERCHANT EARLY ACCESS
+                </div>
+                <h1>Stop Checking Screenshots. Automate Wallet Payments.</h1>
+                <p>Turn manual transfers (CliQ, InstaPay, ZainCash) into a seamless, instant checkout experience. Save hours of manual work, boost conversion, and say goodbye to COD risks.</p>
+                <div class="hero-actions">
+                    <a href="#demo" class="btn" style="flex:1;">Book a Demo</a>
+                    <a href="#features" class="btn btn-outline" style="flex:1;">See How It Works</a>
+                </div>
             </section>
 
-            <!-- PROBLEM (Expanded Markets) -->
-            <section class="problem-section reveal">
-                <h2><div class="icon-box problem-color"><svg><use href="#icon-warning"></use></svg></div> The Problem</h2>
+            <!-- PAIN POINTS -->
+            <section class="problem-section reveal" style="margin-top: 40px;">
+                <h2><div class="icon-box problem-color"><svg><use href="#icon-warning"></use></svg></div> The Cost of Manual Payments</h2>
                 <div class="card js-tilt" style="border-left: 3px solid var(--c-problem);">
                     <ul class="bullet-list">
-                        <li><strong>Low Card Adoption</strong><br>80% of MENA customers are excluded from online payments.</li>
-                        <li><strong>Manual Wallets</strong><br>Merchants force users to take "screenshots" of transfers.</li>
-                        <li><strong>COD Risks</strong><br>Cash orders have high return rates and delayed settlement.</li>
+                        <li><strong>Manual Verification is Slow</strong><br>Forcing customers to send screenshots to your WhatsApp ruins the buying experience.</li>
+                        <li><strong>High Cart Abandonment</strong><br>Friction at checkout causes you to lose ready-to-buy customers to competitors.</li>
+                        <li><strong>The COD Trap</strong><br>Relying on Cash on Delivery leads to 20%+ return rates and delayed cash flow.</li>
                     </ul>
-                    <div style="margin-top:25px; padding-top:20px; border-top:1px solid var(--border);">
-                        <!-- Jordan -->
-                        <div class="bar-wrap">
-                            <div class="bar-head"><span>Jordan</span> <span style="color:var(--c-problem)">&lt;20% Cards</span></div>
-                            <div class="bar-bg"><div class="bar-fill" style="width: 20%; background:var(--c-problem);"></div></div>
-                            <a href="https://www.zawya.com/en/economy/levant/jordan-36bln-in-money-transfers-via-cliq-in-first-2-months-of-2025-k0fw2bgf" target="_blank" class="source-btn">Data: Zawya</a>
-                        </div>
-                        <!-- Egypt -->
-                        <div class="bar-wrap">
-                            <div class="bar-head"><span>Egypt</span> <span style="color:#f97316">~25% Cards</span></div>
-                            <div class="bar-bg"><div class="bar-fill" style="width: 25%; background:#f97316;"></div></div>
-                            <a href="https://noda.live/articles/most-popular-payment-methods-by-country" target="_blank" class="source-btn">Data: Noda.live</a>
-                        </div>
-                        <!-- Iraq -->
-                        <div class="bar-wrap">
-                            <div class="bar-head"><span>Iraq</span> <span style="color:var(--c-problem)">&lt;15% Cards</span></div>
-                            <div class="bar-bg"><div class="bar-fill" style="width: 15%; background:var(--c-problem);"></div></div>
-                            <a href="https://www.researchandmarkets.com/reports/5898140/middle-east-online-payment-methods" target="_blank" class="source-btn">Data: ResearchAndMarkets</a>
-                        </div>
-                         <!-- Palestine -->
-                         <div class="bar-wrap">
-                            <div class="bar-head"><span>Palestine</span> <span style="color:var(--c-problem)">&lt;10% Cards</span></div>
-                            <div class="bar-bg"><div class="bar-fill" style="width: 10%; background:var(--c-problem);"></div></div>
-                            <a href="https://www.pma.ps/" target="_blank" class="source-btn">Data: World Bank/PMA</a>
-                        </div>
-                    </div>
                 </div>
             </section>
 
             <!-- SOLUTION -->
-            <section class="reveal">
-                <h2><div class="icon-box solution-color"><svg><use href="#icon-bulb"></use></svg></div> Our Solution</h2>
+            <section class="whynow-section reveal" id="features">
+                <h2><div class="icon-box solution-color"><svg><use href="#icon-bulb"></use></svg></div> Your AI Payment Assistant</h2>
                 <div class="card js-tilt" style="border-left: 3px solid var(--c-solution);">
-                    <p>A universal <strong>AI Verification Agent</strong> that replaces screenshots.</p>
-                    <div style="background:#000; padding:15px; border-radius:12px; text-align:center; margin:20px 0; border:1px solid rgba(255,255,255,0.1);">
-                        <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:5px;">IDENTITY BECOMES</div>
-                        <div style="font-size:1.4rem; font-weight:700; color:#fff;">ORDER ID</div>
-                    </div>
-                    <div class="bento-grid">
-                        <div class="bento-item"><span class="bento-icon">🚫</span><div class="bento-title">No Manual Work</div></div>
-                        <div class="bento-item"><span class="bento-icon">⚡</span><div class="bento-title">Instant Sync</div></div>
+                    <ul class="bullet-list" style="margin-bottom: 20px;">
+                        <li><strong>Zero Manual Work:</strong> MASA automatically reads incoming bank notifications and matches them to active orders.</li>
+                        <li><strong>Instant Order Fulfillment:</strong> Orders are marked as "Paid" instantly on your dashboard (Shopify, WooCommerce).</li>
+                        <li><strong>No Coding Required:</strong> Plug and play integration with your existing store setup.</li>
+                    </ul>
+                    <div style="background:#000; padding:15px; border-radius:12px; text-align:center; border:1px solid rgba(255,255,255,0.1);">
+                        <div style="font-size:0.7rem; color:var(--text-muted); margin-bottom:5px;">WE TURN THE SENDER'S NAME INTO AN</div>
+                        <div style="font-size:1.4rem; font-weight:700; color:#fff;">AUTOMATED ORDER ID</div>
                     </div>
                 </div>
             </section>
 
             <!-- PRODUCT (Sim) -->
             <section class="reveal">
-                <h2><div class="icon-box product-color"><svg><use href="#icon-product"></use></svg></div> Product</h2>
+                <h2><div class="icon-box product-color"><svg><use href="#icon-product"></use></svg></div> See It In Action</h2>
                 <div class="card js-tilt" style="border-left: 3px solid var(--c-product);">
-                    <p style="font-size:0.9rem; margin-bottom:15px;">Real-time AI Verification Logic:</p>
+                    <p style="font-size:0.9rem; margin-bottom:15px;">Real-time AI Verification Logic running quietly in the background:</p>
                     <div class="sim-phone">
                         <div class="sim-msg">
                             <strong>Bank SMS:</strong> Received 25.00 JOD from Ahmad (Ref: 99283)
                         </div>
                         <div class="sim-ai">
                             <div class="sim-badge">MASA AGENT</div>
-                            <div style="font-size:0.8rem; color:#fff;">Matched Order #99283 ✅</div>
-                            <div style="font-size:0.7rem; color:var(--c-solution);">Confidence: 99.9%</div>
+                            <div style="font-size:0.8rem; color:#fff;">Matched Web Order #99283 ✅</div>
+                            <div style="font-size:0.7rem; color:var(--c-solution);">Payment Confirmed - Fulfilling Order...</div>
                         </div>
                     </div>
                     <div class="bento-grid">
                         <div class="bento-item">
-                            <h4 style="color:#fff; font-size:0.8rem;">Parsing Engine</h4>
-                            <p style="font-size:0.7rem; margin:0;">Extracts amount & ref ID.</p>
+                            <h4 style="color:#fff; font-size:0.8rem;">Auto-Sync</h4>
+                            <p style="font-size:0.7rem; margin:0;">Updates your store instantly.</p>
                         </div>
                         <div class="bento-item">
-                            <h4 style="color:#fff; font-size:0.8rem;">Merchant Dash</h4>
-                            <p style="font-size:0.7rem; margin:0;">Auto-reconciles orders.</p>
+                            <h4 style="color:#fff; font-size:0.8rem;">Reconciliation</h4>
+                            <p style="font-size:0.7rem; margin:0;">Exports clean data for accountants.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- WHY NOW -->
-            <section class="whynow-section reveal">
-                <h2><div class="icon-box whynow-color"><svg><use href="#icon-clock"></use></svg></div> Why Now</h2>
-                <div class="card js-tilt" style="border-left: 3px solid var(--c-whynow);">
-                    <ul class="bullet-list">
-                        <li><strong>Real-Time Boom:</strong><br>CliQ (Jordan) and InstaPay (Egypt) volume has exploded, but P2M tools are missing.</li>
-                        <li><strong>AI Maturity:</strong><br>LLMs can now parse unstructured notification text instantly and cheaply.</li>
-                        <li><strong>Post-Cash Era:</strong><br>Merchants are actively rejecting Cash (COD) to save costs.</li>
-                    </ul>
-                </div>
-            </section>
-
-            <!-- MARKET SIZE -->
+            <!-- PRICING -->
             <section class="reveal">
-                <h2><div class="icon-box solution-color"><svg><use href="#icon-chart"></use></svg></div> Market Size</h2>
-                <div style="display:flex; flex-direction:column; gap:10px;">
-                    <div style="padding:15px; border:1px solid var(--border); border-radius:16px; text-align:center; background:rgba(255,255,255,0.02);">
-                        <div style="font-size:2rem; font-weight:800; line-height:1;">$57B</div>
-                        <div style="font-size:0.7rem; color:var(--text-muted);">TAM: MENA E-Comm</div>
+                <h2><div class="icon-box solution-color"><svg><use href="#icon-money"></use></svg></div> Simple, Transparent Pricing</h2>
+                <div class="bento-grid">
+                    <div class="card js-tilt" style="margin:0; padding:15px; border-top: 3px solid var(--c-solution);">
+                        <div style="font-size:0.7rem; font-weight:700; color:var(--c-solution); text-transform:uppercase;">Pay As You Grow</div>
+                        <div style="font-size:1.8rem; font-weight:800;">1.5%</div>
+                        <div style="font-size:0.65rem; color:#fff; margin-bottom:5px; font-weight:700;">per successful transaction</div>
+                        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:5px; line-height:1.3;">No setup fees. No hidden costs. Cheaper than standard credit card gateways.</p>
                     </div>
-                    <div style="padding:15px; border:1px solid rgba(59,130,246,0.3); border-radius:16px; text-align:center; background:rgba(59,130,246,0.1);">
-                        <div style="font-size:2rem; font-weight:800; color:#60a5fa; line-height:1;">$15B</div>
-                        <div style="font-size:0.7rem; color:var(--text-muted);">SAM: Cash Volume</div>
-                    </div>
-                    <div style="padding:15px; border:1px solid var(--c-solution); border-radius:16px; text-align:center; background:rgba(34,197,94,0.1);">
-                        <div style="font-size:2rem; font-weight:800; color:var(--c-solution); line-height:1;">$250M</div>
-                        <div style="font-size:0.7rem; color:var(--text-muted);">SOM: Jordan GMV</div>
+                    <div class="card js-tilt" style="margin:0; padding:15px; border-top: 3px solid var(--c-product);">
+                        <div style="font-size:0.7rem; font-weight:700; color:var(--c-product); text-transform:uppercase;">SaaS Pro</div>
+                        <div style="font-size:1.8rem; font-weight:800;">$19<span style="font-size:0.9rem; font-weight:400;">/mo</span></div>
+                        <div style="font-size:0.65rem; color:#fff; margin-bottom:5px; font-weight:700;">+ 1.0% per transaction</div>
+                        <p style="font-size:0.75rem; color:var(--text-muted); margin-top:5px; line-height:1.3;">Advanced analytics, dedicated accountant export tools, and multi-agent access.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- COMPETITION (Expanded) -->
+            <!-- COMPETITIVE ADVANTAGE / COMPARISON -->
             <section class="reveal">
-                <h2><div class="icon-box comp-color"><svg><use href="#icon-target"></use></svg></div> Competition</h2>
+                <h2><div class="icon-box comp-color"><svg><use href="#icon-target"></use></svg></div> Why Choose MASA</h2>
                 <div class="card">
                     <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:10px; border-bottom:1px solid var(--border); padding-bottom:10px; margin-bottom:10px; font-size:0.7rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">
-                        <div>Method</div><div style="text-align:center;">Instant</div><div style="text-align:center;">No Card</div>
+                        <div>Checkout Method</div><div style="text-align:center;">Instant</div><div style="text-align:center;">Card-Free</div>
                     </div>
                     
                     <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:10px; margin-bottom:12px; align-items:center; font-size:0.8rem;">
-                        <div>Manual CliQ</div><div style="text-align:center; color:var(--c-problem);">✕</div><div style="text-align:center; color:var(--c-solution);">✓</div>
+                        <div>Manual WhatsApp/CliQ</div><div style="text-align:center; color:var(--c-problem);">✕</div><div style="text-align:center; color:var(--c-solution);">✓</div>
                     </div>
                     
                     <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:10px; margin-bottom:12px; align-items:center; font-size:0.8rem;">
-                        <div>Stripe / Network</div><div style="text-align:center; color:var(--c-solution);">✓</div><div style="text-align:center; color:var(--c-problem);">✕</div>
+                        <div>Standard Gateways (Stripe)</div><div style="text-align:center; color:var(--c-solution);">✓</div><div style="text-align:center; color:var(--c-problem);">✕</div>
                     </div>
 
-                    <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:10px; margin-bottom:12px; align-items:center; font-size:0.8rem;">
-                        <div>MEPS (Jordan)</div><div style="text-align:center; color:var(--c-solution);">✓</div><div style="text-align:center; color:var(--c-problem);">✕</div>
-                    </div>
-                    
                     <div style="display:grid; grid-template-columns: 2fr 1fr 1fr; gap:10px; align-items:center; background:rgba(59,130,246,0.1); padding:10px; border-radius:8px; font-size:0.8rem;">
                         <div style="font-weight:700; color:#fff;">MASA Pay</div><div style="text-align:center; color:var(--c-solution);">✓</div><div style="text-align:center; color:var(--c-solution);">✓</div>
                     </div>
                 </div>
             </section>
 
-            <!-- COMPETITIVE ADVANTAGE -->
-            <section class="moat-section reveal">
-                <h2><div class="icon-box moat-color"><svg><use href="#icon-shield"></use></svg></div> Advantage</h2>
-                <div class="card js-tilt" style="border-left: 3px solid var(--c-moat);">
-                    <ul class="bullet-list">
-                        <li><strong>AI-Native:</strong><br>Built to parse unstructured notifications, not waiting for bank APIs.</li>
-                        <li><strong>Universal Layer:</strong><br>We scale to any wallet (Zain, Orange) instantly.</li>
-                        <li><strong>Data Moat:</strong><br>Proprietary dataset of transaction patterns improves fraud detection.</li>
-                    </ul>
-                </div>
-            </section>
-
-            <!-- ROADMAP (Expanded) -->
-            <section class="reveal">
-                <h2><div class="icon-box product-color"><svg><use href="#icon-map"></use></svg></div> Roadmap</h2>
-                <div class="card">
-                    <div class="timeline">
-                        <div class="timeline-item">
-                            <div class="timeline-dot" style="background:var(--c-solution); border-color:var(--c-solution);"></div>
-                            <div class="tag" style="background:rgba(34,197,94,0.2); color:var(--c-solution);">NOW</div>
-                            <h4 style="font-size:0.9rem;">MVP Public Launch</h4>
-                            <p style="font-size:0.75rem; color:var(--text-muted); margin:0;">Core AI parsing engine operational. NLP model training for basic Arabic/English bank SMS.</p>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-dot" style="border-color:var(--c-whynow);"></div>
-                            <div class="tag" style="background:rgba(59,130,246,0.2); color:var(--c-whynow);">Q3 2026</div>
-                            <h4 style="font-size:0.9rem;">Merchant Pilot & API</h4>
-                            <p style="font-size:0.75rem; color:var(--text-muted); margin:0;">Release Developer Webhooks and Shopify Plugin. Onboard 50 pilot merchants in Jordan.</p>
-                        </div>
-                        <div class="timeline-item">
-                            <div class="timeline-dot" style="border-color:var(--c-product);"></div>
-                            <div class="tag" style="background:rgba(139,92,246,0.2); color:var(--c-product);">2027</div>
-                            <h4 style="font-size:0.9rem;">Regional Expansion</h4>
-                            <p style="font-size:0.75rem; color:var(--text-muted); margin:0;">Expand support for InstaPay (Egypt) and ZainCash (Iraq). Enterprise SSO.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- TEAM (Oday Ali) -->
-            <section class="reveal">
-                <h2><div class="icon-box whynow-color"><svg><use href="#icon-group"></use></svg></div> Team</h2>
-                <div class="card" style="display:flex; align-items:center; gap:15px;">
-                    <div style="width:60px; height:60px; background:#222; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#555; border:1px solid #333; font-size:24px;">👨‍💻</div>
-                    <div>
-                        <h4 style="margin-bottom:2px;">Oday Ali</h4>
-                        <div style="font-size:0.75rem; color:var(--c-whynow); font-weight:700; margin-bottom:4px;">FOUNDER & CTO</div>
-                        <p style="margin:0; font-size:0.8rem; line-height:1.3;">Expert in Verification Methods.<br>Patent Holder in Data Gathering.</p>
-                    </div>
+            <!-- CTA SECTION -->
+            <section class="reveal" id="demo">
+                <div class="card js-tilt" style="text-align:center; border: 1px solid var(--c-product); background: linear-gradient(180deg, rgba(24, 24, 27, 0.6) 0%, rgba(139, 92, 246, 0.1) 100%); margin-top: 30px; padding: 40px 20px;">
+                    <h2 style="justify-content:center; margin-bottom:10px; font-size:1.8rem;">Ready to Automate?</h2>
+                    <p style="color:#d8b4fe; font-size:0.9rem; margin-bottom:25px;">Join top merchants currently saving 15+ hours a week on payment reconciliation.</p>
+                    <a href="mailto:sales@masa.pay" class="btn" style="width:100%; max-width: 250px; margin: 0 auto; display:block;">Get Started Today</a>
+                    <div style="font-size:0.7rem; color:var(--text-muted); margin-top:15px;">Takes less than 5 minutes to integrate.</div>
                 </div>
             </section>
             
-            <div style="text-align:center; font-size:0.7rem; color:#444; margin-top:50px;">&copy; 2026 MASA Pay</div>
+            <div style="text-align:center; font-size:0.7rem; color:#444; margin-top:30px;">&copy; 2026 MASA Pay. All rights reserved.</div>
 
         </div>
     </div>
 
     <!-- SCRIPTS -->
     <script>
-        // 1. SPLASH SCREEN
+        // 1. SPLASH SCREEN TO APP
         window.onload = function() {
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 splash.style.opacity = '0';
                 setTimeout(() => {
                     splash.style.display = 'none';
-                    document.getElementById('login-screen').style.display = 'flex';
-                    startParticles();
-                }, 500);
-            }, 1500);
-        };
-
-        // 2. PARTICLES
-        function startParticles() {
-            const canvas = document.getElementById('login-bg-canvas');
-            const ctx = canvas.getContext('2d');
-            let w, h, particles =[];
-            
-            function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
-            window.addEventListener('resize', resize);
-            resize();
-
-            for(let i=0; i<50; i++) {
-                particles.push({ x: Math.random()*w, y: Math.random()*h, vx: (Math.random()-0.5)*0.5, vy: (Math.random()-0.5)*0.5 });
-            }
-
-            function anim() {
-                ctx.clearRect(0,0,w,h);
-                ctx.fillStyle = 'rgba(139,92,246,0.3)';
-                ctx.strokeStyle = 'rgba(139,92,246,0.1)';
-                particles.forEach((p, i) => {
-                    p.x+=p.vx; p.y+=p.vy;
-                    if(p.x<0||p.x>w) p.vx*=-1; if(p.y<0||p.y>h) p.vy*=-1;
-                    ctx.beginPath(); ctx.arc(p.x, p.y, 2, 0, Math.PI*2); ctx.fill();
-                    for(let j=i+1; j<particles.length; j++) {
-                        let p2 = particles[j], d = Math.hypot(p.x-p2.x, p.y-p2.y);
-                        if(d<150) { ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p2.x,p2.y); ctx.stroke(); }
-                    }
-                });
-                requestAnimationFrame(anim);
-            }
-            anim();
-        }
-
-        // 3. LOGIN & REVEAL
-        function login() {
-            const u = document.getElementById('user').value;
-            const p = document.getElementById('pass').value;
-            const scr = document.getElementById('login-screen');
-            const app = document.getElementById('app');
-            const err = document.getElementById('err');
-
-            if(u === 'zinc' && p === 'malhas2026') {
-                scr.style.opacity = '0';
-                setTimeout(() => {
-                    scr.style.display = 'none';
+                    const app = document.getElementById('app');
                     app.style.display = 'block';
                     setTimeout(() => app.style.opacity = '1', 50);
                     initObservers();
-                    setTimeout(() => { document.querySelectorAll('.bar-fill').forEach(b => b.style.width = b.style.width); }, 200);
-                }, 800);
-            } else {
-                err.innerText = 'Invalid Credentials';
-            }
-        }
-        document.getElementById('pass').addEventListener('keyup', e => { if(e.key === 'Enter') login() });
+                }, 500);
+            }, 1200);
+        };
 
-        // 4. OBSERVER & TILT
+        // 2. OBSERVER (Scroll Reveals)
         function initObservers() {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('active'); });
@@ -552,6 +378,7 @@
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         }
 
+        // 3. 3D CARD TILT EFFECT
         document.querySelectorAll('.js-tilt').forEach(c => {
             c.addEventListener('mousemove', (e) => {
                 const r = c.getBoundingClientRect();
@@ -559,7 +386,19 @@
                 const rx = ((y - r.height/2) / r.height) * -5; const ry = ((x - r.width/2) / r.width) * 5;
                 c.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) scale3d(1.02,1.02,1.02)`;
             });
-            c.addEventListener('mouseleave', () => { c.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1,1,1)`; });
+            c.addEventListener('mouseleave', () => { 
+                c.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale3d(1,1,1)`; 
+            });
+        });
+
+        // 4. SMOOTH SCROLLING FOR CTA BUTTONS
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
         });
     </script>
 </body>
